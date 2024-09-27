@@ -1,2 +1,5 @@
 # Ignore token.json file
 **/token.json
+
+# Ignore environment variable files
+*.env
