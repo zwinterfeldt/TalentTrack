@@ -1,0 +1,9 @@
+.signUpButton {
+    color: #a162f7;
+    margin-top: 16px;
+    font: 500 18px 'Inter', sans-serif; 
+    background: none; 
+    border: none;     
+    cursor: pointer;  
+  }
+  
