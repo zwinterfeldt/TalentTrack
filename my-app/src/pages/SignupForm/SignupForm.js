@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from './SignupForm.module.css';
 import InputField from './InputField';
 
+
 const SignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -35,10 +36,18 @@ const SignupForm = () => {
               <InputField label="First Name" name="firstName" placeholder="Delowar" />
               <InputField label="Last Name" name="lastName" placeholder="Hossen" />
               <InputField label="Email" name="email" type="email" placeholder="uistore@gmail.com" />
-              <InputField label = "Password" name = "password" type = "password" placeholder="********"
-          
-              
-                </div>
+              <InputField 
+                label="Password" 
+                name="password" 
+                type={showPassword ? "text" : "password"} 
+                placeholder="********" 
+              />
+              <div className={styles.togglePassword}>
+                <input 
+                  type="checkbox" 
+                  checked={showPassword} 
+                  onChange={togglePasswordVisibility} 
+                /> Show Password
               </div>
             </section>
             <a href="/forgot-password" className={styles.forgotPasswordLink}>Forgot your password?</a>
@@ -53,3 +62,4 @@ const SignupForm = () => {
 };
 
 export default SignupForm;
+
