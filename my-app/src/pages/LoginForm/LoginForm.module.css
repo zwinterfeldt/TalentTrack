@@ -1,9 +1,142 @@
-.signUpButton {
-    color: #a162f7;
-    margin-top: 16px;
-    font: 500 18px 'Inter', sans-serif; 
-    background: none; 
-    border: none;     
-    cursor: pointer;  
+/* Container for the login page */
+.loginContainer {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  align-items: center;
+  padding: 91px 80px 226px;
+}
+
+@media (max-width: 991px) {
+  .loginContainer {
+    padding: 0 20px 100px;
   }
+}
+
+/* Form Wrapper */
+.formWrapper {
+  display: flex;
+  width: 506px;
+  max-width: 100%;
+  flex-direction: column;
+}
+
+/* Header with title and Sign Up link */
+.header {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Title for login form */
+.title {
+  color: #242731;
+  font: 700 30px DM Sans, sans-serif;
+}
+
+/* Sign Up Link section */
+.signUpLink {
+  color: #a162f7;
+  margin-top: 16px;
+  font: 500 18px Inter, sans-serif;
+}
+
+
+.signUpButton {
+  color: #a162f7;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: 500 18px Inter, sans-serif;
+  text-decoration: underline;
+}
+
+/* Content inside the form */
+.formContent {
+  display: flex;
+  margin-top: 40px;
+  width: 100%;
+  flex-direction: column;
+}
+
+/* Fields inside the form */
+.formFields {
+  display: flex;
+  width: 100%;
+  max-width: 506px;
+  flex-direction: column;
+  font: 16px DM Sans, sans-serif;
+}
+
+@media (max-width: 991px) {
+  .formFields {
+    max-width: 100%;
+  }
+}
+
+/* Input groups */
+.inputGroup {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.inputWrapper {
+  margin-bottom: 20px;
+}
+
+/* Label for input fields */
+.inputLabel {
+  color: #242731;
+  font-weight: 500;
+}
+
+/* Input fields */
+.inputField {
+  align-self: stretch;
+  border-radius: 10px;
+  margin-top: 8px;
+  width: 100%;
+  color: #777e90;
+  font-weight: 400;
+  padding: 19px 20px;
+  border: 1px solid #b1b5c3;
+}
+
+/* Forgot password link */
+.forgotPassword {
+  align-self: flex-start;
+  margin-top: 24px;
+  color: #a162f7;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Sign In Button */
+.signInButton {
+  border-radius: 10px;
+  background-color: #a162f7;
+  color: #fffaf7;
+  font: 700 20px Inter, sans-serif;
+  padding: 18px 51px;
+  border: none;
+  cursor: pointer;
+  margin-top: 30px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Sign In Button text */
+.signInText {
+  color: #fff;
+}
+
+@media (max-width: 991px) {
+  .signInButton {
+    padding: 18px 20px;
+  }
+}
+
   

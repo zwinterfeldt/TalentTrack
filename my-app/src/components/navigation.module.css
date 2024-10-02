@@ -1,75 +1,36 @@
-/* basic styling to be edited accordingly later*/
+/* NavBar has to be edited later this is just basic implementation of what it would look like*/
 
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    padding: 1rem;
-  }
-  
-  .logo a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  .navLinks {
-    list-style: none;
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .navLinks li {
-    display: inline;
-  }
-  
-  .navLink {
-    color: #fff;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.3s;
-  }
-  
-  .navLink:hover {
-    background-color: #575757;
-    border-radius: 5px;
-  }
-  
-  /* Hamburger Menu for Mobile */
-  .hamburger {
-    display: none;
-    font-size: 2rem;
-    color: white;
-    cursor: pointer;
-  }
-  
-  /* Responsive Styles */
-  @media (max-width: 768px) {
-    .hamburger {
-      display: block; /* Show hamburger menu on smaller screens */
-    }
-  
-    .navLinks {
-      flex-direction: column;
-      position: absolute;
-      top: 60px;
-      right: 0;
-      background-color: #333;
-      width: 200px;
-      height: 100vh;
-      justify-content: start;
-      align-items: center;
-      display: none;
-    }
-  
-    .navLinks.active {
-      display: flex; /* Show the links when the menu is active */
-    }
-  
-    .navLink {
-      padding: 1rem;
-    }
-  }
+.navigation {
+  width: 200px; 
+  height: 100vh; 
+  background-color: #340072; 
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.logo {
+  margin-bottom: 20px; 
+}
+
+.navList {
+  list-style-type: none; 
+  padding: 0;
+  width: 100%;
+}
+
+.navItem {
+  padding: 10px 20px;
+  color: #ffffff;
+  text-decoration: none; 
+  display: block; 
+}
+
+.navItem:hover {
+  background-color: #291052; 
+}
+
+
   

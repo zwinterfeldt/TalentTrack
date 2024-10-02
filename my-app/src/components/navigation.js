@@ -1,32 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from './navigation.module.css'; // Importing your CSS module
+import styles from './navigation.module.css'; // Ensure you have CSS module for styling
 
 const Navigation = () => {
-  const [isOpen, setIsOpen] = useState(false); // State to manage mobile menu
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
   return (
-    <nav className={styles.navbar}>
-      <div className={styles.logo}>
-        <Link to="/">TalentTrack</Link>
-      </div>
-      <div className={styles.hamburger} onClick={toggleMenu}>
-        ☰ {/* Simple hamburger icon for mobile */}
-      </div>
-      <ul className={`${styles.navLinks} ${isOpen ? styles.active : ''}`}>
-        <li><Link to="/" className={styles.navLink}>Home</Link></li>
-        <li><Link to="/dashboard" className={styles.navLink}>Dashboard</Link></li>
-        <li><Link to="/settings" className={styles.navLink}>Settings</Link></li>
-        <li><Link to="/profile" className={styles.navLink}>Profile</Link></li>
-        <li><Link to="/login" className={styles.navLink}>Login</Link></li> {/* Conditionally show Logout if user is logged in */}
+    <div className={styles.navigation}>
+      <h1 className={styles.logo}>Talent Track</h1>
+      <ul className={styles.navList}>
+        <li><Link to="/" className={styles.navItem}>Dashboard</Link></li>
+        <li><Link to="/settings" className={styles.navItem}>Settings</Link></li>
+        <li><Link to="/logout" className={styles.navItem}>Log out</Link></li>
       </ul>
-    </nav>
+    </div>
   );
 };
 
 export default Navigation;
+
+
 
