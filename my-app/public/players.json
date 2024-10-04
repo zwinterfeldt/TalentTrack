@@ -1,0 +1,25 @@
+[
+    {
+      "id": 1,
+      "name": "Meron Woldesenebt",
+      "rating": 4,
+      "position": "Forward",
+      "grad_year": 2024,
+      "state": "California",
+      "gpa": 3.8,
+      "last_game": "10/02/2024",
+      "other_info": "Something important"
+    },
+    {
+      "id": 2,
+      "name": "Jane ",
+      "rating": 3,
+      "position": "Midfielder",
+      "grad_year": 2023,
+      "state": "Texas",
+      "gpa": 3.7,
+      "last_game": "10/01/2024 ",
+      "other_info": "Something important"
+    }
+  ]
+  

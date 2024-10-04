@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from './navigation.module.css'; // Ensure you have CSS module for styling
+import styles from './navigation.module.css'; 
 
 const Navigation = () => {
   return (
