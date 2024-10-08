@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -262,6 +262,7 @@ def get_comments():
     } for comment in all_comments])
 
 # Get comment by id
+@app.route("/api/v1/comments/<int:comment_id>", methods = ["GET"])
 def get_comment(comment_id):
     comment = comments.query.get(comment_id)  # Query comment by ID
     if comment:
@@ -273,6 +274,55 @@ def get_comment(comment_id):
         })
     return jsonify({'message': 'Comment not found'}), 404
 
+# POST endpoints
+# Create user
+@app.route("/api/v1/users", methods = ["POST"])
+def post_user():
+    new_user = request.get_json()
+    if not new_user or 'username' not in new_user or 'user_password' not in new_user:
+        return jsonify({'error': 'Username and password are required'}), 400
+
+    existing_user = users.query.filter_by(username=new_user['username']).first()
+    if existing_user:
+        return jsonify({'error': 'Username already exists'}), 409
+
+    user = users()
+    user.username = new_user['username']
+    user.user_password = new_user['user_password']
+    user.created_at = datetime.utcnow()
+
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify({
+        'user_id': user.user_id,
+        'username': user.username,
+        'created_at': user.created_at
+    }), 201
+
+# Create roles
+@app.route("/api/v1/useremails", methods = ["POST"])
+def post_user_email():
+    new_user_email = request.get_json()
+    if not new_user_email or 'user_id' not in new_user_email or 'email_address' not in new_user_email:
+        return jsonify({'error': 'User id and email address are required'}), 400
+
+    existing_email = user_emails.query.filter_by(user_emails=new_user_email['user_emails']).first()
+    if existing_email:
+        return jsonify({'error': 'Username already exists'}), 409
+
+    user_email = user_emails()
+    user_email.user_id = new_user_email['user_id']
+    user_email.email_address = new_user_email['email_address']
+
+    db.session.add(user_email)
+    db.session.commit()
+
+    return jsonify({
+        'user_email_id': user_email.user_email_id,
+        'user_id': user_email.user_id,
+        'email_address': user_email.email_address
+    }), 201
 
 if __name__ == '__main__':
     app.run(host= "0.0.0.0", port=50100, debug=True)
