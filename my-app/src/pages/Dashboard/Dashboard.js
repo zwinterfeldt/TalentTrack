@@ -1,18 +1,22 @@
-// src/pages/Dashboard/Dashboard.js
-
+//dashboard.js
 import React from 'react';
-import navigation from '../../components/navigation';  
+import SideBar from '../../components/SideBar';  
 import PlayerTable from '../../components/PlayerTable';
-
+import styles from './Dashboard.module.css';
 
 const Dashboard = () => {
     return (
-        <div>
-            <navigation />
-            <h1>Dashboard</h1>
-            <PlayerTable />
+        <div className={styles.dashboardContainer}> 
+            <div className={styles.sideBar}>
+                <SideBar /> 
+            </div>
+            <div className={styles.mainContent}>
+                <h1>Dashboard</h1>
+                <PlayerTable /> 
+            </div>
         </div>
     );
 };
 
 export default Dashboard;
+

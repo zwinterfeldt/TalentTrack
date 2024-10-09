@@ -1,34 +1,30 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+//loginform.js
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import styles from './LoginForm.module.css';
 
 const LoginForm = () => {
-  const navigate = useNavigate(); // Initialize the navigate hook
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  // Function to navigate to the Signup form
-  const goToSignup = () => {
-    navigate('/signup'); // Navigate to the /signup route
+  const handleLogin = (e) => {
+    e.preventDefault();
+    
+    // Simulate authentication (bypassing validation) temporary for midterm presentation demo
+    localStorage.setItem('isAuthenticated', 'true');
+    // Navigate to the dashboard after login
+    navigate('/dashboard');
   };
 
   return (
     <main className={styles.loginContainer}>
       <div className={styles.formWrapper}>
         <header className={styles.header}>
-          <h1 className={styles.title}>Get started.</h1>
-          <p className={styles.signUpLink}>
-            <span style={{fontFamily: 'DM Sans, sans-serif', fontWeight: 400, lineHeight: '23px', color: '#7c7c8d'}}>
-              Don't have an account?
-            </span>{' '}
-            <button 
-              onClick={goToSignup}  // Add onClick to navigate to Signup form
-              className={styles.signUpButton} 
-            >
-              Sign up
-            </button>
-          </p>
+          <h1 className={styles.title}>Log in</h1>
         </header>
         <section className={styles.formContent}>
-          <form className={styles.formFields}>
+          <form onSubmit={handleLogin} className={styles.formFields}>
             <div className={styles.inputGroup}>
               <div className={styles.inputWrapper}>
                 <label htmlFor="email" className={styles.inputLabel}>Email</label>
@@ -36,8 +32,9 @@ const LoginForm = () => {
                   id="email"
                   type="email"
                   className={styles.inputField}
-                  placeholder="uistore@gmail.com"
-                  aria-label="Email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className={styles.inputWrapper}>
@@ -46,12 +43,12 @@ const LoginForm = () => {
                   id="password"
                   type="password"
                   className={styles.inputField}
-                  placeholder="**********"
-                  aria-label="Password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
             </div>
-            <a href="#" className={styles.forgotPassword}>Forgot your password?</a>
             <button type="submit" className={styles.signInButton}>
               <span className={styles.signInText}>Sign in</span>
             </button>
@@ -63,3 +60,5 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+
+

@@ -1,5 +1,5 @@
 .signUpContainer {
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -42,6 +42,7 @@
     margin-top: 40px;
     width: 100%;
     flex-direction: column;
+    background-color: rgba(255, 255, 255, 0);
   }
   
   .formMain {
@@ -62,19 +63,22 @@
     align-items: flex-start;
     border-radius: 10px;
     border: 1px solid #f4f5f6;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.8); 
     box-shadow: 0 10px 110px 1px rgba(59, 59, 59, 0.08);
     display: flex;
     width: 100%;
     flex-direction: column;
     padding: 20px;
+    backdrop-filter: blur(10px); 
   }
+  
   
   .inputGroup {
     display: flex;
     width: 100%;
     max-width: 446px;
     flex-direction: column;
+    background-color: rgba(255, 255, 255, 0);
   }
   
   @media (max-width: 991px) {
@@ -93,7 +97,7 @@
     border-radius: 10px;
     margin-top: 16px;
     width: 100%;
-    color: #777e90;
+    color: #070809;
     font-weight: 400;
     padding: 19px 20px;
     border: 1px solid #b1b5c3;

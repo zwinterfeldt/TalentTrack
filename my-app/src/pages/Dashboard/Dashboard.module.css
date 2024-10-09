@@ -1,0 +1,20 @@
+/* src/pages/Dashboard/Dashboard.module.css */
+
+
+.dashboardContainer {
+    display: flex;
+    height: 100vh;
+}
+
+
+.sideBar {
+    width: 250px;
+    background-color: #f4f4f4;
+}
+
+
+.mainContent {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
