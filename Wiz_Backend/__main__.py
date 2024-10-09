@@ -301,6 +301,48 @@ def post_user():
     }), 201
 
 # Create roles
+@app.route("/api/v1/roles", methods = ["POST"])
+def post_role():
+    new_role = request.get_json()
+    if not new_role or 'role_name' not in new_role:
+        return jsonify({'error': 'Role name is required'}), 400
+
+    role = roles(
+        role_name=new_role.get('role_name')
+    )
+
+    db.session.add(role)
+    db.session.commit()
+
+    return jsonify({
+        'role_id': role.role_id,
+        'role_name': role.role_name
+    }), 201
+
+# Create user roles
+@app.route("/api/v1/userroles", methods = ["POST"])
+def post_user_role():
+    new_user_role = request.get_json()
+    if not new_user_role or 'user_id' not in new_user_role or 'role_id' not in new_user_role:
+        return jsonify({'error': 'User id and role id are required'}), 400
+
+    user_role = user_roles(
+        user_id=new_user_role.get('user_id'),
+        role_id=new_user_role.get('role_id')
+    )
+
+    db.session.add(user_role)
+    db.session.commit()
+
+    return jsonify({
+        'user_role_id': user_role.role_id,
+        'user_id': user_role.user_id,
+        'role_id': user_role.role_id
+    }), 201
+
+
+
+# Create user emails
 @app.route("/api/v1/useremails", methods = ["POST"])
 def post_user_email():
     new_user_email = request.get_json()
@@ -323,6 +365,96 @@ def post_user_email():
         'user_id': user_email.user_id,
         'email_address': user_email.email_address
     }), 201
+
+# Create email texts
+@app.route("/api/v1/emailtexts", methods = ["POST"])
+def post_email_texts():
+    new_email_text = request.get_json()
+    if not new_email_text or 'user_email_id' not in new_email_text or 'email_text' not in new_email_text:
+        return jsonify({'error': 'User email id and email text are required'}), 400
+
+    email_text_class = email_text(
+        user_email_id=new_email_text.get('user_email_id'),
+        email_text=new_email_text.get('email_text')
+    )
+
+    db.session.add(email_text_class)
+    db.session.commit()
+
+    return jsonify({
+        'email_id': email_text_class.email_id,
+        'user_email_id': email_text_class.user_email_id,
+        'email_text': email_text_class.user_email_id,
+        'parsed_at': email_text_class.parsed_at
+    }), 201
+
+
+
+
+# Create players
+@app.route("/api/v1/players", methods = ["POST"])
+def post_player():
+    new_player = request.get_json()
+    if not new_player:
+        return jsonify({'error': ' are required'}), 400
+
+    player = players(
+        user_id=new_player.get('user_id'),
+        source_email_id=new_player.get('source_email_id'),
+        first_name=new_player['first_name'],
+        last_name=new_player['last_name'],
+        address=new_player.get('address'),
+        grad_year=new_player['grad_year'],
+        gpa=new_player['gpa'],
+        player_position=new_player['player_position'],
+        high_school=new_player['high_school'],
+        high_school_coach_name=new_player.get('high_school_coach_name'),
+        high_school_coach_email=new_player.get('high_school_coach_email'),
+        club_team=new_player.get('club_team'),
+        club_team_coach_name=new_player.get('club_team_coach_name'),
+        club_team_coach_email=new_player.get('club_team_coach_email'),
+        parents_names=new_player.get('parents_names'),
+        parents_contacts=new_player.get('parents_contacts'),
+        stars=new_player.get('stars')
+    )
+
+    db.session.add(player)
+    db.session.commit()
+
+    return jsonify({
+        'player_id': player.player_id,
+        'first_name': player.first_name,
+        'last_name': player.last_name,
+        'grad_year': player.grad_year,
+        'gpa': str(player.gpa),
+        'player_position': player.player_position,
+        'high_school': player.high_school,
+        'last_updated': player.last_updated.isoformat()
+    }), 201
+
+# Create comments
+@app.route("/api/v1/comments", methods = ["POST"])
+def post_comments():
+    new_comment = request.get_json()
+    if not new_comment or 'player_id' not in new_comment or 'comment_text' not in new_comment:
+        return jsonify({'error': 'Player id and comment text are required'}), 400
+
+    comment = comments(
+        player_id=new_comment.get('player_id'),
+        comment_text=new_comment.get('comment_text')
+    )
+
+    db.session.add(comment)
+    db.session.commit()
+
+    return jsonify({
+        'comment_id': comment.comment_id,
+        'player_id': comment.player_id,
+        'comment_text': comment.comment_text,
+        'created_at': comment.created_at
+    }), 201
+
+
 
 if __name__ == '__main__':
     app.run(host= "0.0.0.0", port=50100, debug=True)
