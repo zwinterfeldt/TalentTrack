@@ -1,5 +1,6 @@
 # Ignore token.json file
 **/token.json
+**/credentials.json
 
 # Ignore environment variable files
 *.env
