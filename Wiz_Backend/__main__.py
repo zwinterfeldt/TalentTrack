@@ -4,7 +4,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:AzureDBTT%252024@database-2.cn44ysyqsxm2.us-east-2.rds.amazonaws.com:5432/TTdatabase'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Mavericks2024!@database-1.cfmcu4ekyg1w.us-east-2.rds.amazonaws.com:5432/TTdatabase'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy()
@@ -29,28 +29,28 @@ class roles(db.Model):
 # User Roles model
 class user_roles(db.Model):
     user_role_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
-    role_id = db.Column(db.Integer, db.ForeignKey('role.role_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.role_id'), nullable=False)
     assigned_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # User emails model
 class user_emails(db.Model):
     user_email_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('User.user_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     email_address = db.Column(db.String(255), nullable=False)
 
 # Email Text model
 class email_text(db.Model):
     email_id = db.Column(db.Integer, primary_key=True)
-    user_email_id = db.Column(db.Integer, db.ForeignKey('user_email.user_email_id'), nullable=False)
+    user_email_id = db.Column(db.Integer, db.ForeignKey('user_emails.user_email_id'), nullable=False)
     email_text = db.Column(db.Text, nullable=False)
     parsed_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # Players Model
 class players(db.Model):
     player_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('User.user_id'), nullable=True)
-    source_email_id = db.Column(db.Integer, db.ForeignKey('Email_Text.email_id'), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=True)
+    source_email_id = db.Column(db.Integer, db.ForeignKey('email_text.email_id'), nullable=True)
     first_name = db.Column(db.String(255))
     last_name = db.Column(db.String(255))
     address = db.Column(db.String(255))
@@ -71,7 +71,7 @@ class players(db.Model):
 # Comments model
 class comments(db.Model):
     comment_id = db.Column(db.Integer, primary_key=True)
-    player_id = db.Column(db.Integer, db.ForeignKey('player.player_id'), nullable=False)
+    player_id = db.Column(db.Integer, db.ForeignKey('players.player_id'), nullable=False)
     comment_text = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
