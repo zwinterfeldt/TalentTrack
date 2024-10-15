@@ -2,7 +2,7 @@
 
 import React from 'react';
 import navigation from '../../components/navigation';  
-import PlayerTable from '../../components/PlayerTable';
+import { PlayerTable1 } from '../../components/PlayerTable1.js';
 
 
 const Dashboard = () => {
@@ -10,7 +10,7 @@ const Dashboard = () => {
         <div>
             <navigation />
             <h1>Dashboard</h1>
-            <PlayerTable />
+            <PlayerTable1 />
         </div>
     );
 };
