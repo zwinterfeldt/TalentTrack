@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "name": "Meron Woldesenebt",
+    "rating": 4,
+    "position": "Forward",
+    "grad_year": 2024,
+    "state": "California",
+    "gpa": 3.80,
+    "last_game": "10/02/2024",
+    "other_info": "Something important"
+  },
+  {
+    "id": 2,
+    "name": "Jane ",
+    "rating": 3,
+    "position": "Midfielder",
+    "grad_year": 2023,
+    "state": "Texas",
+    "gpa": 3.71,
+    "last_game": "10/01/2024 ",
+    "other_info": "Something important"
+  },
+  {
+    "id": 3,
+    "name": "Zach Winterfeldt",
+    "rating": 4,
+    "position": "Goalkeeper",
+    "grad_year": 2024,
+    "state": "Minnesota",
+    "gpa": 3.65,
+    "last_game": "10/05/2024",
+    "other_info": "Something important"
+  }
+]
