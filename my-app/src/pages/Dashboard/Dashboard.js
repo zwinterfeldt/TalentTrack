@@ -3,6 +3,7 @@ import React from 'react';
 import SideBar from '../../components/SideBar';  
 import PlayerTable from '../../components/PlayerTable';
 import styles from './Dashboard.module.css';
+import { PlayerTable1 } from '../../components/PlayerTable1';
 
 const Dashboard = () => {
     return (
@@ -12,7 +13,7 @@ const Dashboard = () => {
             </div>
             <div className={styles.mainContent}>
                 <h1>Dashboard</h1>
-                <PlayerTable /> 
+                <PlayerTable1 /> 
             </div>
         </div>
     );
