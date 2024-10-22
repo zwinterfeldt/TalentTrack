@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { CSVLink } from "react-csv";
 import { useTable, useSortBy } from 'react-table';
 import players from './players.json';
 import { COLUMNS } from './columns';
