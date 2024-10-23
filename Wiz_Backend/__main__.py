@@ -454,7 +454,75 @@ def post_comments():
         'created_at': comment.created_at
     }), 201
 
+# Delete user by id
+@app.route("/api/v1/users/<int:user_id>", methods=['DELETE'])
+def delete_user(user_id):
+    user = users.query.get(user_id)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({'message': 'User deleted successfully'}), 200
+    return jsonify({'message': 'User not found'}), 404
 
+# Delete role by id
+@app.route("/api/v1/roles/<int:role_id>", methods=['DELETE'])
+def delete_role(role_id):
+    role = roles.query.get(role_id)
+    if role:
+        db.session.delete(role)
+        db.session.commit()
+        return jsonify({'message': 'Role deleted successfully'}), 200
+    return jsonify({'message': 'Role not found'}), 404
+
+# Delete user role by id
+@app.route("/api/v1/userroles/<int:user_role_id>", methods=['DELETE'])
+def delete_user_role(user_role_id):
+    user_role = user_roles.query.get(user_role_id)
+    if user_role:
+        db.session.delete(user_role)
+        db.session.commit()
+        return jsonify({'message': 'User role deleted successfully'}), 200
+    return jsonify({'message': 'User role not found'}), 404
+
+# Delete user email by id
+@app.route("/api/v1/useremails/<int:user_email_id>", methods=['DELETE'])
+def delete_user_email(user_email_id):
+    user_email = user_emails.query.get(user_email_id)
+    if user_email:
+        db.session.delete(user_email)
+        db.session.commit()
+        return jsonify({'message': 'User email deleted successfully'}), 200
+    return jsonify({'message': 'User email not found'}), 404
+
+# Delete email text by id
+@app.route("/api/v1/emailtexts/<int:email_id>", methods=['DELETE'])
+def delete_email_text(email_id):
+    email = email_text.query.get(email_id)
+    if email:
+        db.session.delete(email)
+        db.session.commit()
+        return jsonify({'message': 'Email text deleted successfully'}), 200
+    return jsonify({'message': 'Email text not found'}), 404
+
+# Delete player by id
+@app.route("/api/v1/players/<int:player_id>", methods=['DELETE'])
+def delete_player(player_id):
+    player = players.query.get(player_id)
+    if player:
+        db.session.delete(player)
+        db.session.commit()
+        return jsonify({'message': 'Player deleted successfully'}), 200
+    return jsonify({'message': 'Player not found'}), 404
+
+# Delete comment by id
+@app.route("/api/v1/comments/<int:comment_id>", methods=['DELETE'])
+def delete_comment(comment_id):
+    comment = comments.query.get(comment_id)
+    if comment:
+        db.session.delete(comment)
+        db.session.commit()
+        return jsonify({'message': 'Comment deleted successfully'}), 200
+    return jsonify({'message': 'Comment not found'}), 404
 
 if __name__ == '__main__':
     app.run(host= "0.0.0.0", port=50100, debug=True)
