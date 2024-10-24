@@ -1,10 +1,12 @@
+# This file can be ignored!!
+# Keeping it in the repo for reference
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Mavericks2024!@database-1.cfmcu4ekyg1w.us-east-2.rds.amazonaws.com:5432/TTdatabase'
+app.config['SQLALCHEMY_DATABASE_URI'] = ''
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy()
