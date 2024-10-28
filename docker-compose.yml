@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./Wiz_Backend 
+    ports:
+      - "5000:5000"       
+    environment:
+      - DATABASE_URL='postgresql://postgres:Mavericks2024!@database-1.cfmcu4ekyg1w.us-east-2.rds.amazonaws.com:5432/TTdatabase'
+
+  frontend:
+    build:
+      context: ./my-app  
+    ports:
+      - "3000:3000" 
+
+volumes:
+  db_data:
