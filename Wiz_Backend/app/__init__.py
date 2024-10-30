@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import os
 
+
 load_dotenv()
 
 # Create an instance of SQLAlchemy
@@ -20,7 +21,7 @@ def create_app():
 
     # import routes and create_routes function
     from . import routes
-    from app.routes import create_routes
+    from .routes import create_routes
 
     # Register routes
     with app.app_context():

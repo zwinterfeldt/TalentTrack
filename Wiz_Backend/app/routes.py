@@ -1,6 +1,6 @@
-from app import db
+from .__init__ import db
 from flask import jsonify, request
-from app.models import users, user_roles, user_emails, email_text, players, comments, roles
+from .models import users, user_roles, user_emails, email_text, players, comments, roles
 from datetime import datetime
 
 # def for creating routes in __init__.py file
