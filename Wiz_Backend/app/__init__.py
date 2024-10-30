@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 
@@ -17,6 +18,16 @@ def create_app():
 
     # Initialize the SQLAlchemy instance with the app
     db.init_app(app)
+
+    # Configure CORS with allowed origins
+    allowed_origins = [
+        'http://localhost:3000',  # Your frontend's local development origin
+        'https://your-production-domain.com',  # Your production domain
+        'http://localhost:3500',
+        'http://localhost:5000'
+    ]
+    CORS(app, origins=allowed_origins, supports_credentials=True)
+
 
     # import routes and create_routes function
     from . import routes

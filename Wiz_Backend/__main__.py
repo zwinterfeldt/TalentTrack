@@ -2,11 +2,16 @@
 # Keeping it in the repo for reference
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from datetime import datetime
 
 app = Flask(__name__)
+CORS(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = ''
+# Allow CORS from http://localhost:3000
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Mavericks2024!@database-1.cfmcu4ekyg1w.us-east-2.rds.amazonaws.com:5432/TTdatabase'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy()

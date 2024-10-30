@@ -2,6 +2,7 @@ from app import db
 from flask import jsonify, request
 from app.models import users, user_roles, user_emails, email_text, players, comments, roles
 from datetime import datetime
+from bcrypt import hashpw, gensalt
 
 # def for creating routes in __init__.py file
 def create_routes(app):
@@ -210,10 +211,13 @@ def create_routes(app):
         existing_user = users.query.filter_by(username=new_user['username']).first()
         if existing_user:
             return jsonify({'error': 'Username already exists'}), 409
+        
+        # Hash password
+        hashed_password = hashpw(new_user['user_password'].encode('utf-8'), gensalt())
 
         user = users()
         user.username = new_user['username']
-        user.user_password = new_user['user_password']
+        user.user_password = hashed_password
         user.created_at = datetime.utcnow()
 
         db.session.add(user)

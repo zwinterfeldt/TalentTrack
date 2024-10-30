@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './SignupForm.module.css';
 import InputField from './InputField';
 
+const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}}$/;
+const PWD_REGEX = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[1@#$%]).{8,24}$/;
 
 const SignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
