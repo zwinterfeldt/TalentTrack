@@ -1,19 +1,27 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { CSVLink } from "react-csv";
 import { useTable, useSortBy } from 'react-table';
-import players from './players.json';
+// import players from './players.json';
 import { COLUMNS } from './columns';
 import '../table.css';
+import axios from 'axios';
 
 export const PlayerTable1 = () => {
+    const [players, setPlayers] = useState([]);
     const [expandedRowIndex, setExpandedRowIndex] = useState(null);
 
     const columns = useMemo(() => COLUMNS, []);
-    const data = useMemo(() => players, []);
+
+    // Fetch players data from the backend
+    useEffect(() => {
+        axios.get('http://localhost:5000/api/v1/players')
+            .then(response => setPlayers(response.data))
+            .catch(error => console.error('Failed to fetch players:', error));
+    }, []);
 
     const tableInstance = useTable({
         columns,
-        data
+        data: players
     }, useSortBy);
 
     const {
@@ -68,11 +76,11 @@ export const PlayerTable1 = () => {
                                         <div style={{ padding: '10px', background: '#f9f9f9' }}>
                                             {/* Render additional player details here */}
                                             <strong>More Details:</strong>
-                                            <p>Name: {row.original.name}</p>
-                                            <p>High School: {row.original.highSchool}</p>
+                                            <p>Name: {row.original.first_name}</p>
+                                            <p>High School: {row.original.high_school}</p>
                                             <p>GPA: {row.original.gpa}</p>
                                             <p>Club Team: {row.original.clubTeam}</p>
-                                            <p>Position: {row.original.position}</p>
+                                            <p>Position: {row.original.player_position}</p>
                                         </div>
                                     </td>
                                 </tr>
