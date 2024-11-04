@@ -1,13 +1,19 @@
 from app import db
 from flask import jsonify, request
+from flask_jwt_extended import create_access_token
+from flask_cors import CORS
 from app.models import users, user_roles, user_emails, email_text, players, comments, roles
 from datetime import datetime
-from bcrypt import hashpw, gensalt
+from bcrypt import hashpw, gensalt, checkpw
+import jwt
+import os
 
 # def for creating routes in __init__.py file
 def create_routes(app):
     # GET endpoints
     # Get all users
+    # Enable CORS for all routes and allow requests from http://localhost:3000
+    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
     @app.route("/api/v1/users", methods = ["GET"])
     def get_users():
         all_users = users.query.all()  # Query all users
@@ -18,8 +24,21 @@ def create_routes(app):
             'last_login': user.last_login.isoformat() if user.last_login else None
         } for user in all_users])
 
+    # # Get user by id
+    # @app.route("/api/v1/user/auth", methods = ["GET"])
+    # def get_user(user_id):
+    #     user = users.query.get(user_id)  # Query user by ID
+    #     if user:
+    #         return jsonify({
+    #             'user_id': user.user_id,
+    #             'username': user.username,
+    #             'created_at': user.created_at.isoformat(),
+    #             'last_login': user.last_login.isoformat() if user.last_login else None,
+    #         })
+    #     return jsonify({'message': 'User not found'}), 404
+    
     # Get user by id
-    @app.route("/api/v1/user/<int:user_id>", methods = ["GET"])
+    @app.route("/api/v1/user/auth", methods = ["GET"])
     def get_user(user_id):
         user = users.query.get(user_id)  # Query user by ID
         if user:
@@ -27,7 +46,7 @@ def create_routes(app):
                 'user_id': user.user_id,
                 'username': user.username,
                 'created_at': user.created_at.isoformat(),
-                'last_login': user.last_login.isoformat() if user.last_login else None
+                'last_login': user.last_login.isoformat() if user.last_login else None,
             })
         return jsonify({'message': 'User not found'}), 404
 
@@ -201,6 +220,11 @@ def create_routes(app):
         return jsonify({'message': 'Comment not found'}), 404
 
     # POST endpoints
+
+    # Generating secret key for JWT tokens
+    SECRET_KEY = "your-secret-key"
+
+
     # Create user
     @app.route("/api/v1/users", methods = ["POST"])
     def post_user():
@@ -389,6 +413,22 @@ def create_routes(app):
             'comment_text': comment.comment_text,
             'created_at': comment.created_at
         }), 201
+    
+    # Login user
+    @app.route('/api/v1/login', methods=['POST'])
+    def login_user():
+        try:
+            data = request.get_json()
+            username = data.get('username')
+            password = data.get('user_password')
+
+            # Your authentication logic here...
+
+            # Respond with token (no need for manual CORS headers)
+            token = jwt.encode({"username": username}, SECRET_KEY, algorithm="HS256")
+            return jsonify({"accessToken": token}), 200
+        except Exception as e:
+            return jsonify({"error": "An error occurred during login"}), 500
 
     #DELETE enpoints
     # Delete user by id

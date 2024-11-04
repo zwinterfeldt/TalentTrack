@@ -61,9 +61,11 @@ const SignupForm1 = () => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         // If button enabled with JS hack
         const v1 = USER_REGEX.test(user);
         const v2 = PWD_REGEX.test(pwd);
+        
         if (!v1 || !v2) {
             setErrMsg('Invalid entry');
             return;
