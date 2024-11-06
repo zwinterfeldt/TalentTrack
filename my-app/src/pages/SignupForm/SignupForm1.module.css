@@ -1,0 +1,181 @@
+.signUpContainer {
+    background-color: rgba(255, 255, 255, 0);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    align-items: center;
+    padding: 91px 80px 226px;
+  }
+  
+  @media (max-width: 991px) {
+    .signUpContainer {
+      padding: 0 20px 100px;
+    }
+  }
+  
+  .formContent {
+    display: flex;
+    width: 506px;
+    max-width: 100%;
+    flex-direction: column;
+  }
+  
+  .formHeader {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .title {
+    color: #242731;
+    font: 700 30px DM Sans, sans-serif;
+  }
+  
+  .signInLink {
+    color: #a162f7;
+    margin-top: 16px;
+    font: 500 18px Inter, sans-serif;
+  }
+  
+  .formWrapper {
+    display: flex;
+    margin-top: 40px;
+    width: 100%;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0);
+  }
+  
+  .formMain {
+    display: flex;
+    width: 100%;
+    max-width: 506px;
+    flex-direction: column;
+    font: 16px DM Sans, sans-serif;
+  }
+  
+  @media (max-width: 991px) {
+    .formMain {
+      max-width: 100%;
+    }
+  }
+  
+  .userDetailsSection {
+    align-items: flex-start;
+    border-radius: 10px;
+    border: 1px solid #f4f5f6;
+    background: rgba(255, 255, 255, 0.8); 
+    box-shadow: 0 10px 110px 1px rgba(59, 59, 59, 0.08);
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding: 20px;
+    backdrop-filter: blur(10px); 
+  }
+  
+  
+  .inputGroup {
+    display: flex;
+    width: 100%;
+    max-width: 446px;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0);
+  }
+  
+  @media (max-width: 991px) {
+    .inputGroup {
+      max-width: 100%;
+    }
+  }
+  
+  .inputLabel {
+    color: #242731;
+    font-weight: 500;
+  }
+  
+  .inputField {
+    align-self: stretch;
+    border-radius: 10px;
+    margin-top: 16px;
+    width: 100%;
+    color: #070809;
+    font-weight: 400;
+    padding: 19px 20px;
+    border: 1px solid #b1b5c3;
+  }
+  
+  .passwordInputGroup {
+    display: flex;
+    margin-top: 14px;
+    width: 100%;
+    max-width: 446px;
+    flex-direction: column;
+  }
+  
+  @media (max-width: 991px) {
+    .passwordInputGroup {
+      max-width: 100%;
+    }
+  }
+  
+  .passwordField {
+    border-radius: 10px;
+    display: flex;
+    margin-top: 12px;
+    width: 100%;
+    align-items: center;
+    color: #777e90;
+    font-weight: 400;
+    justify-content: space-between;
+    padding: 19px 20px;
+    border: 1px solid #b1b5c3;
+  }
+  
+  .passwordVisibilityToggle {
+    aspect-ratio: 1.25;
+    width: 20px;
+    cursor: pointer;
+  }
+  
+  .forgotPasswordLink {
+    align-self: flex-start;
+    margin-top: 24px;
+    color: #a162f7;
+    font-weight: 500;
+  }
+  
+  .signInButton {
+    border-radius: 10px;
+    display: flex;
+    margin-top: 30px;
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .signInButtonText {
+    border-radius: 10px;
+    background-color: #a162f7;
+    color: #fffaf7;
+    font: 700 20px Inter, sans-serif;
+    padding: 18px 51px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  @media (max-width: 991px) {
+    .signInButtonText {
+      max-width: 100%;
+      padding: 18px 20px;
+    }
+  }
+  
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }

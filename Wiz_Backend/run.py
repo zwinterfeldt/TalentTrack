@@ -4,7 +4,7 @@ from flask_cors import CORS
 # create app
 app = create_app()
 
-CORS(app)
+CORS(app, supports_credentials=True, origins="http://localhost:3000")
 
 # run app with debug
 if __name__ == '__main__':
