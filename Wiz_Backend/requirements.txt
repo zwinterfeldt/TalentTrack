@@ -7,4 +7,5 @@ Flask
 Flask-JWT-Extended
 bcrypt
 PyJWT
+requests
 

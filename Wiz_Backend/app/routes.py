@@ -7,6 +7,7 @@ from datetime import datetime
 from bcrypt import hashpw, gensalt, checkpw
 import jwt
 import os
+import requests 
 
 # def for creating routes in __init__.py file
 def create_routes(app):
@@ -237,7 +238,7 @@ def create_routes(app):
             return jsonify({'error': 'Username already exists'}), 409
         
         # Hash password
-        hashed_password = hashpw(new_user['user_password'].encode('utf-8'), gensalt())
+        hashed_password = hashpw(new_user['user_password'].encode('utf-8'), gensalt()).decode('utf-8')
 
         user = users()
         user.username = new_user['username']
@@ -414,21 +415,44 @@ def create_routes(app):
             'created_at': comment.created_at
         }), 201
     
-    # Login user
+    '''
+    @app.route('/api/v1/users/<username>', methods=['GET'])
+    def get_user_by_username(username):
+        user = users.query.filter_by(username=username).first()
+        
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        return jsonify({
+            'user_id': user.user_id,
+            'username': user.username,
+            'user_password': user.user_password, 
+            'created_at': user.created_at
+        }), 200
+    '''
+
     @app.route('/api/v1/login', methods=['POST'])
     def login_user():
         try:
             data = request.get_json()
             username = data.get('username')
             password = data.get('user_password')
+            
+            user = users.query.filter_by(username=username).first()
+            
+            if not user:
+                return jsonify({"error": "Invalid username or password"}), 401
 
-            # Your authentication logic here...
+            if not checkpw(password.encode('utf-8'), user.user_password.encode('utf-8')):
+                return jsonify({"error": "Invalid username or password"}), 401
 
-            # Respond with token (no need for manual CORS headers)
             token = jwt.encode({"username": username}, SECRET_KEY, algorithm="HS256")
             return jsonify({"accessToken": token}), 200
+
         except Exception as e:
-            return jsonify({"error": "An error occurred during login"}), 500
+            print(f"Error during login: {e}")
+            return jsonify({"error": f"An error occurred during login: {str(e)}"}), 500
+
 
     #DELETE enpoints
     # Delete user by id
