@@ -32,8 +32,5 @@ export const COLUMNS = [
         Header: "Last game",
         accessor: "last_game"
     },
-    {
-        Header: "Other info",
-        accessor: "other_info"
-    }
+    
 ]

@@ -2,23 +2,23 @@ import React, { useState } from 'react';
 import styles from './PlayerModal.module.css';
 
 const PlayerModal = ({ player, isAddingPlayer, onClose, onSave, onAdd }) => {
-   const defaultPlayer = {
-    name: '',          
-    highSchool: '',    
-    gpa: '',           
-    clubTeam: '',      
-    position: '',      
-    gradYear: '',      
-    state: '',         
-    lastGame: '',      
-    email: ''         
-};
-
+    const defaultPlayer = {             
+        name: '',            
+        highSchool: '',      
+        gpa: '',             
+        clubTeam: '',
+        rating: '',        
+        position: '',        
+        grad_year: '',       
+        state: '',           
+        last_game: '',       
+        email: ''             
+    };
 
     const [editablePlayer, setEditablePlayer] = useState(
         isAddingPlayer ? defaultPlayer : { ...player }
     );
-    const [isEditMode, setIsEditMode] = useState(isAddingPlayer); 
+    const [isEditMode, setIsEditMode] = useState(isAddingPlayer); // Add mode starts in edit mode
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -42,16 +42,16 @@ const PlayerModal = ({ player, isAddingPlayer, onClose, onSave, onAdd }) => {
                 </button>
                 <h2>{isAddingPlayer ? 'Add New Player' : 'Player Details'}</h2>
 
-                {/* Render all fields */}
+                {/* Render all fields dynamically */}
                 {Object.keys(editablePlayer).map((key) => (
                     <div key={key} className={styles.formGroup}>
-                        <label>{key.charAt(0).toUpperCase() + key.slice(1)}</label>
+                        <label>{key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' ')}</label>
                         {isEditMode ? (
                             <input
                                 name={key}
-                                value={editablePlayer[key]}
+                                value={editablePlayer[key] || ''} // Fallback to an empty string
                                 onChange={handleChange}
-                                placeholder={`Enter ${key}`}
+                                placeholder={`Enter ${key.replace('_', ' ')}`}
                             />
                         ) : (
                             <p>{editablePlayer[key] || 'N/A'}</p>
@@ -87,4 +87,5 @@ const PlayerModal = ({ player, isAddingPlayer, onClose, onSave, onAdd }) => {
 };
 
 export default PlayerModal;
+
 
