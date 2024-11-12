@@ -109,5 +109,31 @@
   white-space: nowrap;
   border: 0;
 }
+.csvButtonContainer {
+  margin-top: 20px;
+}
+
+.csvButton {
+  display: flex; 
+  align-items: center; 
+  justify-content: flex-start; 
+  border-radius: 6px;
+  background: none; 
+  border: none; 
+  color: #5f6165; 
+  padding: 10px; 
+  cursor: pointer;
+  text-decoration: none; 
+  font: 500 14px DM Sans, sans-serif; 
+  text-align: left;
+  width: 100%; 
+  transition: background-color 0.3s ease;
+}
+
+.csvButton:hover {
+  background-color: #f0f0f0; 
+  color: #333; 
+}
+
 
   
