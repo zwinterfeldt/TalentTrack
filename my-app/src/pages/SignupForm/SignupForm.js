@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import styles from './SignupForm.module.css';
 import InputField from './InputField';
 
-
 const SignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -35,6 +34,7 @@ const SignupForm = () => {
             <section className={styles.userDetailsSection}>
               <InputField label="First Name" name="firstName" placeholder="Delowar" />
               <InputField label="Last Name" name="lastName" placeholder="Hossen" />
+              <InputField label="Sport" name="sport" placeholder="Enter the sport you are recruiting for" />
               <InputField label="Email" name="email" type="email" placeholder="uistore@gmail.com" />
               <InputField 
                 label="Password" 
