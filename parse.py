@@ -2,6 +2,7 @@ import os.path
 import base64
 import re
 import dotenv
+from google.auth.exceptions import RefreshError
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -17,22 +18,37 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
  
 def authenticate_gmail_api():
-    """Authenticate the user and return the service to interact with Gmail API"""
+    """Authenticate the user and refresh the access token each time the script is run."""
     creds = None
+    
+    # Load existing credentials from token.json
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-            creds = flow.run_local_server(port=8080, access_type='offline', prompt='consent')
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
+    
+    # Force refresh the access token even if it's not expired
+    if creds and creds.refresh_token:
+        try:
+            print("Forcing access token refresh...")
+            creds.refresh(Request())  # This will force-refresh the access token
+            print("Token refreshed successfully.")
+        except RefreshError:
+            print("Failed to refresh token. The refresh token might be invalid or expired.")
+            creds = None  # Force re-authentication if refresh fails
 
+    # If there are no valid credentials, initiate the OAuth flow to get new tokens
+    if not creds or not creds.valid:
+        print("Authenticating user...")
+        flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+        creds = flow.run_local_server(port=8080, access_type='offline', prompt='consent')
+
+    # Save the refreshed or newly obtained credentials back to token.json
+    with open('token.json', 'w') as token:
+        print("writing ")
+        token.write(creds.to_json())
+    
+    # Build and return the Gmail service instance
     service = build('gmail', 'v1', credentials=creds)
     return service
-
  
 def extract_email_body(parts):
     """Extract and decode the plain text email body from all parts and return the concatenated result"""
@@ -71,7 +87,7 @@ def get_emails_in_past_24_hours(service):
             #print("Message body: ", email_body)
             #print("-" * 50)
     return emails
- 
+
 def extract_original_sender(headers, body):
     """Extract the original sender's email address from headers or fallback to the body content."""
     # Initialize a list to store any found email addresses
@@ -93,8 +109,12 @@ def extract_information_from_email(email_body):
     # Initialize the OpenAI client with your API key
     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
     prompt = f"""
-    You are an AI that helps extract information from soccer recruitment emails. The email is written by a high school student to a soccer coach. Please ensure the following fields are always present in the JSON output, even if the values are missing. For missing values, leave them empty ("") or use null, but keep the structure the same. Do not modify the field names or order.
-    
+    You are an AI that helps extract information from soccer recruitment emails. The email is typically written by a high school student to a soccer coach. Please analyze the email and determine if it is a soccer recruitment-related email. 
+
+    If it is a recruitment-related email, extract the information and fill out the following fields. If any information is missing, leave those fields as empty strings ("") or null, but keep the structure the same. Do not modify the field names or order.
+
+    If the email is not related to soccer recruitment, still return the following JSON object with all fields as empty strings ("") or null.
+
     Fields:
     - First Name
     - Last Name
@@ -112,8 +132,9 @@ def extract_information_from_email(email_body):
     Here is the email body:
     {email_body}
 
-    Return the information as a well-formatted JSON object, with all fields in the order provided.
+    Return the information as a well-formatted JSON object, with all fields in the order provided. If the email is not recruitment-related, ensure all fields are empty strings or null.
     """
+
 
     # Call the OpenAI API to generate a completion
     chat_completion = client.chat.completions.create(
@@ -158,7 +179,7 @@ def get_latest_email(service):
         
         print("-" * 50)
  
-if __name__ == '__main__':
+def main():
     gmail_service = authenticate_gmail_api()
     email_body = get_latest_email(gmail_service)
     extracted_info = extract_information_from_email(email_body)
