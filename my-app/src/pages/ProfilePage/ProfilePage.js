@@ -5,10 +5,10 @@ import SideBar from '../../components/SideBar';
 const ProfilePage = () => {
   const [profilePicture, setProfilePicture] = useState(null);
   const [profileInfo, setProfileInfo] = useState({
-    name: "Peter Griffin",
-    email: "peter.griffin@example.com",
-    sport: "Soccer",
-    username: "peterG123",
+    name: "",
+    email: "",
+    sport: "",
+    username: "",
   });
 
   const handleProfilePictureChange = (e) => {
@@ -59,6 +59,7 @@ const ProfilePage = () => {
               type="text"
               id="name"
               className={styles.inputField}
+              placeholder="Name"
               value={profileInfo.name}
               onChange={handleInputChange}
             />
@@ -69,6 +70,7 @@ const ProfilePage = () => {
               type="email"
               id="email"
               className={styles.inputField}
+              placeholder="Email"
               value={profileInfo.email}
               onChange={handleInputChange}
             />
@@ -79,6 +81,7 @@ const ProfilePage = () => {
               type="text"
               id="sport"
               className={styles.inputField}
+              placeholder="Sport"
               value={profileInfo.sport}
               onChange={handleInputChange}
             />
@@ -89,6 +92,7 @@ const ProfilePage = () => {
               type="text"
               id="username"
               className={styles.inputField}
+              placeholder="Username"
               value={profileInfo.username}
               onChange={handleInputChange}
             />
