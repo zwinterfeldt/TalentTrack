@@ -1,94 +1,115 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import { CSVLink } from "react-csv";
+import React, { useMemo, useState } from 'react';
 import { useTable, useSortBy } from 'react-table';
-// import players from './players.json';
+import playersData from './players.json';
 import { COLUMNS } from './columns';
+import PlayerModal from './PlayerModal';
 import '../table.css';
-import axios from 'axios';
 
 export const PlayerTable1 = () => {
-    const [players, setPlayers] = useState([]);
-    const [expandedRowIndex, setExpandedRowIndex] = useState(null);
+    const [players, setPlayers] = useState(playersData);
+    const [selectedPlayer, setSelectedPlayer] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddingPlayer, setIsAddingPlayer] = useState(false); 
 
     const columns = useMemo(() => COLUMNS, []);
+    const data = useMemo(() => players, [players]);
 
-    // Fetch players data from the backend
-    useEffect(() => {
-        axios.get('http://localhost:5000/api/v1/players')
-            .then(response => setPlayers(response.data))
-            .catch(error => console.error('Failed to fetch players:', error));
-    }, []);
+    const tableInstance = useTable(
+        {
+            columns,
+            data,
+        },
+        useSortBy
+    );
 
-    const tableInstance = useTable({
-        columns,
-        data: players
-    }, useSortBy);
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
 
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow
-    } = tableInstance;
+    // Save player details
+    const savePlayer = (updatedPlayer) => {
+        const updatedPlayers = players.map((player) =>
+            player.id === updatedPlayer.id ? updatedPlayer : player
+        );
+        setPlayers(updatedPlayers);
+        setIsModalOpen(false);
+    };
 
-    // Toggle the expanded row
-    const toggleRowExpansion = (rowIndex) => {
-        setExpandedRowIndex(expandedRowIndex === rowIndex ? null : rowIndex);
+    // Add new player
+    const addPlayer = (newPlayer) => {
+        setPlayers([...players, { ...newPlayer, id: players.length + 1 }]);
+        setIsModalOpen(false);
     };
 
     return (
-        <table {...getTableProps()}>
-            <thead>
-                {headerGroups.map((headerGroup) => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column) => (
-                            <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                {column.render('Header')}
-                                <span>
-                                    {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                                </span>
-                            </th>
-                        ))}
-                    </tr>
-                ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-                {rows.map((row, rowIndex) => {
-                    prepareRow(row);
-                    return (
-                        <React.Fragment key={rowIndex}>
-                            {/* Main row */}
-                            <tr 
-                                {...row.getRowProps()} 
-                                onClick={() => toggleRowExpansion(rowIndex)} 
+        <>
+            {/* Add Player Button */}
+            <div style={{ marginBottom: '20px' }}>
+                <button
+                    style={{
+                        padding: '10px 15px',
+                        backgroundColor: '#6A5ACD', 
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                    }}
+                    onClick={() => {
+                        setIsAddingPlayer(true);
+                        setSelectedPlayer(null);
+                        setIsModalOpen(true);
+                    }}
+                >
+                    Add Player
+                </button>
+            </div>
+
+            {/* Player Table */}
+            <table {...getTableProps()}>
+                <thead>
+                    {headerGroups.map((headerGroup) => (
+                        <tr {...headerGroup.getHeaderGroupProps()}>
+                            {headerGroup.headers.map((column) => (
+                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                    {column.render('Header')}
+                                    <span>
+                                        {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                                    </span>
+                                </th>
+                            ))}
+                        </tr>
+                    ))}
+                </thead>
+                <tbody {...getTableBodyProps()}>
+                    {rows.map((row) => {
+                        prepareRow(row);
+                        return (
+                            <tr
+                                {...row.getRowProps()}
+                                onClick={() => {
+                                    setSelectedPlayer(row.original);
+                                    setIsAddingPlayer(false);
+                                    setIsModalOpen(true);
+                                }}
                                 style={{ cursor: 'pointer' }}
                             >
-                                {row.cells.map((cell) => {
-                                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
-                                })}
+                                {row.cells.map((cell) => (
+                                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                ))}
                             </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
 
-                            {/* Expanded row details */}
-                            {expandedRowIndex === rowIndex && (
-                                <tr>
-                                    <td colSpan={columns.length}>
-                                        <div style={{ padding: '10px', background: '#f9f9f9' }}>
-                                            {/* Render additional player details here */}
-                                            <strong>More Details:</strong>
-                                            <p>Name: {row.original.first_name}</p>
-                                            <p>High School: {row.original.high_school}</p>
-                                            <p>GPA: {row.original.gpa}</p>
-                                            <p>Club Team: {row.original.clubTeam}</p>
-                                            <p>Position: {row.original.player_position}</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
-                        </React.Fragment>
-                    );
-                })}
-            </tbody>
-        </table>
+            {/* Player Modal */}
+            {isModalOpen && (
+                <PlayerModal
+                    player={selectedPlayer}
+                    isAddingPlayer={isAddingPlayer}
+                    onClose={() => setIsModalOpen(false)}
+                    onSave={savePlayer}
+                    onAdd={addPlayer}
+                />
+            )}
+        </>
     );
 };

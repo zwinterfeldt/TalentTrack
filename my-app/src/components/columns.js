@@ -2,11 +2,11 @@ export const COLUMNS = [
     
     {
         Header: "ID",
-        accessor: "player_id"
+        accessor: "id"
     },
     {
         Header: "Name",
-        accessor: "first_name"
+        accessor: "name"
     },
     {
         Header: "Rating",
@@ -14,11 +14,7 @@ export const COLUMNS = [
     },
     {
         Header: "Position",
-        accessor: "player_position"
-    },
-    {
-        Header: "High School",
-        accessor: "high_school"
+        accessor: "position"
     },
     {
         Header: "Grad year",
@@ -36,8 +32,5 @@ export const COLUMNS = [
         Header: "Last game",
         accessor: "last_game"
     },
-    {
-        Header: "Other info",
-        accessor: "other_info"
-    }
+    
 ]
