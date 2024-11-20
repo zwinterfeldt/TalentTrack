@@ -168,10 +168,10 @@ def create_routes(app):
             'last_updated': player.last_updated.isoformat()  # Convert timestamp to ISO format
         } for player in all_players])
 
-    # Get player by id
-    @app.route("/api/v1/players/<int:player_id>", methods=['GET'])
+    # Get player by ID
+    @app.route("/api/v1/players/<int:player_id>", methods=["GET"])
     def get_player(player_id):
-        player = players.query.get(player_id)  # Query player by ID
+        player = players.query.get(player_id)
         if player:
             return jsonify({
                 'player_id': player.player_id,
@@ -195,7 +195,7 @@ def create_routes(app):
                 'last_updated': player.last_updated.isoformat()
             })
         return jsonify({'message': 'Player not found'}), 404
-
+    
     # Get all comments
     @app.route("/api/v1/comments", methods = ["GET"])
     def get_comments():
@@ -219,6 +219,35 @@ def create_routes(app):
                 'created_at': comment.created_at.isoformat()
             })
         return jsonify({'message': 'Comment not found'}), 404
+    
+    #PUT endpoints
+
+    # Update an existing player
+    @app.route("/api/v1/playerupdate/<int:player_id>", methods=["PUT"])
+    def update_playerupdate(player_id):
+        data = request.get_json()
+        player = players.query.get(player_id)
+        if player:
+            player.first_name = data.get('first_name', player.first_name)
+            player.last_name = data.get('last_name', player.last_name)
+            player.address = data.get('address', player.address)
+            player.grad_year = data.get('grad_year', player.grad_year)
+            player.gpa = data.get('gpa', player.gpa)
+            player.player_position = data.get('player_position', player.player_position)
+            player.high_school = data.get('high_school', player.high_school)
+            player.high_school_coach_name = data.get('high_school_coach_name', player.high_school_coach_name)
+            player.high_school_coach_email = data.get('high_school_coach_email', player.high_school_coach_email)
+            player.club_team = data.get('club_team', player.club_team)
+            player.club_team_coach_name = data.get('club_team_coach_name', player.club_team_coach_name)
+            player.club_team_coach_email = data.get('club_team_coach_email', player.club_team_coach_email)
+            player.parents_names = data.get('parents_names', player.parents_names)
+            player.parents_contacts = data.get('parents_contacts', player.parents_contacts)
+            player.stars = data.get('stars', player.stars)
+            player.last_updated = datetime.utcnow()
+            
+            db.session.commit()
+            return jsonify({'message': 'Player updated successfully'})
+        return jsonify({'message': 'Player not found'}), 404
 
     # POST endpoints
 
@@ -391,7 +420,52 @@ def create_routes(app):
             'high_school': player.high_school,
             'last_updated': player.last_updated.isoformat()
         }), 201
+    
+    @app.route("/api/v1/newplayerform", methods=["POST"])
+    def add_playerfromform():
+        new_player = request.get_json()
 
+        if not new_player:
+            return jsonify({'error': 'Player data is required'}), 400
+
+        try:
+            player = players(
+                user_id=new_player.get('user_id'),
+                source_email_id=new_player.get('source_email_id', None) if new_player.get('source_email_id') not in ['none', 'None', None] else None,
+                first_name=new_player['first_name'], 
+                last_name=new_player['last_name'],    
+                address=new_player.get('address', None),
+                grad_year=new_player['grad_year'],   
+                gpa=new_player['gpa'],               
+                player_position=new_player['player_position'], 
+                high_school=new_player['high_school'],           
+                high_school_coach_name=new_player.get('high_school_coach_name', None),
+                high_school_coach_email=new_player.get('high_school_coach_email', None),
+                club_team=new_player.get('club_team', None),
+                club_team_coach_name=new_player.get('club_team_coach_name', None),
+                club_team_coach_email=new_player.get('club_team_coach_email', None),
+                parents_names=new_player.get('parents_names', None),
+                parents_contacts=new_player.get('parents_contacts', None),
+                stars=new_player.get('stars', None) if new_player.get('stars') not in ['none', 'None', None] else None,
+                last_updated=datetime.utcnow()  
+            )
+        except KeyError as e:
+            return jsonify({'error': f"Missing required field: {e}"}), 400
+
+        # Save the new player to the database
+        db.session.add(player)
+        db.session.commit() 
+
+        return jsonify({
+            'player_id': player.player_id,  
+            'first_name': player.first_name,
+            'last_name': player.last_name,
+            'grad_year': player.grad_year,
+            'gpa': str(player.gpa),  
+            'player_position': player.player_position,
+            'high_school': player.high_school,
+            'last_updated': player.last_updated.isoformat()  
+        }), 201
 
     # Create comments
     @app.route("/api/v1/comments", methods = ["POST"])

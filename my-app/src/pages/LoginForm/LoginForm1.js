@@ -1,6 +1,8 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import AuthContext from '../../context/authProvider';
 import axios from '../../api/axios';
+import styles from './LoginForm.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const LOGIN_URL = '/api/v1/login';
 
@@ -13,6 +15,8 @@ const LoginForm1 = () => {
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         userRef.current.focus();
@@ -36,10 +40,11 @@ const LoginForm1 = () => {
                 console.log(JSON.stringify(response?.data));
                 const accessToken = response?.data?.accessToken;
                 const roles = response?.data?.roles;
-                setAuth({ user, pwd, roles, accessToken});
+                setAuth({ user, pwd, roles, accessToken });
                 setUser('');
                 setPwd('');
                 setSuccess(true);
+                navigate('/dashboard');
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('Network error. Please try again later.');
@@ -53,8 +58,6 @@ const LoginForm1 = () => {
             console.log(err);
             errRef.current.focus();
         }
-        
-        
     }
 
     return (
@@ -68,39 +71,49 @@ const LoginForm1 = () => {
                     </p>
                 </section>
             ) : (
-        <section>
-            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-            <h1>Sign In</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="username">Username:</label>
-                <input
-                    type="text"
-                    id="username"
-                    ref={userRef}
-                    autoComplete="off"
-                    onChange={(e) => setUser(e.target.value)}
-                    value={user}
-                    required
-                />
-                <label htmlFor="password">Password:</label>
-                <input
-                    type="password"
-                    id="password"
-                    onChange={(e) => setPwd(e.target.value)}
-                    value={pwd}
-                    required
-                />
-                <button>Sign In</button>
-            </form>
-            <p>Need an account?<br />
-                <span className="line">
-                    <a href="#">Sign up</a>
-                </span>
-            </p>
-        </section>
-        )}
-    </>
+                <section className={styles.loginContainer}>
+                    <p ref={errRef} className={errMsg ? styles.errmsg : "offscreen"} aria-live="assertive">{errMsg}</p>
+                    <h1 className={styles.title}>Sign In</h1>
+                    <form onSubmit={handleSubmit} className={styles.formWrapper}>
+                        <div className={styles.inputGroup}>
+                            <label htmlFor="username" className={styles.inputLabel}>Username:</label>
+                            <input
+                                type="text"
+                                id="username"
+                                ref={userRef}
+                                autoComplete="off"
+                                onChange={(e) => setUser(e.target.value)}
+                                value={user}
+                                required
+                                className={styles.inputField}
+                            />
+                        </div>
+
+                        <div className={styles.inputGroup}>
+                            <label htmlFor="password" className={styles.inputLabel}>Password:</label>
+                            <input
+                                type="password"
+                                id="password"
+                                onChange={(e) => setPwd(e.target.value)}
+                                value={pwd}
+                                required
+                                className={styles.inputField}
+                            />
+                        </div>
+
+                        <button className={styles.signInButton}>
+                            <span className={styles.signInText}>Sign In</span>
+                        </button>
+                    </form>
+                    <p>Need an account?<br />
+                        <span className={styles.signUpButton}>
+                            <a href="#">Sign up</a>
+                        </span>
+                    </p>
+                </section>
+            )}
+        </>
     )
 }
 
-export default LoginForm1
+export default LoginForm1;

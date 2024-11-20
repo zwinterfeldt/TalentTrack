@@ -2,19 +2,19 @@ export const COLUMNS = [
     
     {
         Header: "ID",
-        accessor: "id"
+        accessor: "player_id"
     },
     {
         Header: "Name",
-        accessor: "name"
+        accessor: row => `${row.first_name} ${row.last_name}`
     },
     {
         Header: "Rating",
-        accessor: "rating"
+        accessor: "stars"
     },
     {
         Header: "Position",
-        accessor: "position"
+        accessor: "player_position"
     },
     {
         Header: "Grad year",

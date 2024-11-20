@@ -1,52 +1,61 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
+import axios from 'axios';
 import { useTable, useSortBy } from 'react-table';
-import playersData from './players.json';
 import { COLUMNS } from './columns';
 import PlayerModal from './PlayerModal';
 import '../table.css';
 
 export const PlayerTable1 = () => {
-    const [players, setPlayers] = useState(playersData);
+    const [players, setPlayers] = useState([]);
     const [selectedPlayer, setSelectedPlayer] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isAddingPlayer, setIsAddingPlayer] = useState(false); 
+    const [isAddingPlayer, setIsAddingPlayer] = useState(false);
 
     const columns = useMemo(() => COLUMNS, []);
-    const data = useMemo(() => players, [players]);
 
-    const tableInstance = useTable(
-        {
-            columns,
-            data,
-        },
-        useSortBy
-    );
+    // Fetch players data from the backend
+    useEffect(() => {
+        axios.get('http://localhost:5000/api/v1/players')
+            .then(response => setPlayers(response.data))
+            .catch(error => console.error('Failed to fetch players:', error));
+    }, []);
 
+    const savePlayer = async (updatedPlayer) => {
+        try {
+            const response = await axios.put(`http://localhost:5000/api/v1/playerupdate/${updatedPlayer.player_id}`, updatedPlayer);
+            if (response.status === 200) {
+                setPlayers(players.map(player =>
+                    player.player_id === updatedPlayer.player_id ? updatedPlayer : player
+                ));
+                setIsModalOpen(false);
+            }
+        } catch (error) {
+            console.error("Error updating player:", error);
+        }
+    };
+
+    const addPlayer = async (newPlayer) => {
+        try {
+            const response = await axios.post('http://localhost:5000/api/v1/newplayerform', newPlayer);
+            if (response.status === 201) {
+                setPlayers([...players, response.data]);
+                setIsModalOpen(false);
+            }
+        } catch (error) {
+            console.error("Error adding player:", error);
+        }
+    };
+
+    const tableInstance = useTable({ columns, data: players }, useSortBy);
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
-
-    // Save player details
-    const savePlayer = (updatedPlayer) => {
-        const updatedPlayers = players.map((player) =>
-            player.id === updatedPlayer.id ? updatedPlayer : player
-        );
-        setPlayers(updatedPlayers);
-        setIsModalOpen(false);
-    };
-
-    // Add new player
-    const addPlayer = (newPlayer) => {
-        setPlayers([...players, { ...newPlayer, id: players.length + 1 }]);
-        setIsModalOpen(false);
-    };
 
     return (
         <>
-            {/* Add Player Button */}
             <div style={{ marginBottom: '20px' }}>
                 <button
                     style={{
                         padding: '10px 15px',
-                        backgroundColor: '#6A5ACD', 
+                        backgroundColor: '#6A5ACD',
                         color: 'white',
                         border: 'none',
                         borderRadius: '5px',
@@ -62,7 +71,6 @@ export const PlayerTable1 = () => {
                 </button>
             </div>
 
-            {/* Player Table */}
             <table {...getTableProps()}>
                 <thead>
                     {headerGroups.map((headerGroup) => (
@@ -100,14 +108,13 @@ export const PlayerTable1 = () => {
                 </tbody>
             </table>
 
-            {/* Player Modal */}
             {isModalOpen && (
                 <PlayerModal
                     player={selectedPlayer}
                     isAddingPlayer={isAddingPlayer}
                     onClose={() => setIsModalOpen(false)}
                     onSave={savePlayer}
-                    onAdd={addPlayer}
+                    onAdd={addPlayer} // Pass the addPlayer function here
                 />
             )}
         </>

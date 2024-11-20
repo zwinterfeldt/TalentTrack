@@ -2,36 +2,36 @@ import React, { useState } from 'react';
 import styles from './PlayerModal.module.css';
 
 const PlayerModal = ({ player, isAddingPlayer, onClose, onSave, onAdd }) => {
-    const defaultPlayer = {             
-        name: '',            
-        highSchool: '',      
-        gpa: '',             
-        clubTeam: '',
-        rating: '',        
-        position: '',        
+    const defaultPlayer = {                        
+        first_name: '',            
+        last_name: '',      
+        player_position: '',        
+        stars: '',        
         grad_year: '',       
         state: '',           
         last_game: '',       
-        email: ''             
+        gpa: '',            
     };
 
     const [editablePlayer, setEditablePlayer] = useState(
         isAddingPlayer ? defaultPlayer : { ...player }
     );
-    const [isEditMode, setIsEditMode] = useState(isAddingPlayer); // Add mode starts in edit mode
+    const [isEditMode, setIsEditMode] = useState(isAddingPlayer);
 
+    // Handle input field changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         setEditablePlayer({ ...editablePlayer, [name]: value });
     };
 
+    // Handle form submission (Add Player)
     const handleSave = () => {
         if (isAddingPlayer) {
-            onAdd(editablePlayer); // Add new player
+            onAdd(editablePlayer); // Add the new player
         } else {
             onSave(editablePlayer); // Save updates
         }
-        setIsEditMode(false); // Exit edit mode
+        setIsEditMode(false); // Exit edit mode after save
     };
 
     return (
@@ -49,7 +49,7 @@ const PlayerModal = ({ player, isAddingPlayer, onClose, onSave, onAdd }) => {
                         {isEditMode ? (
                             <input
                                 name={key}
-                                value={editablePlayer[key] || ''} // Fallback to an empty string
+                                value={editablePlayer[key] || ''} // Fallback to empty string if undefined
                                 onChange={handleChange}
                                 placeholder={`Enter ${key.replace('_', ' ')}`}
                             />
@@ -87,5 +87,3 @@ const PlayerModal = ({ player, isAddingPlayer, onClose, onSave, onAdd }) => {
 };
 
 export default PlayerModal;
-
-

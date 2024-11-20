@@ -15,7 +15,10 @@
     background: white;
     padding: 20px;
     border-radius: 8px;
-    width: 500px;
+    width: 90vw;
+    max-width: 500px; /* Max width */
+    max-height: 80vh; /* Max height */
+    overflow-y: auto; /* Scroll if content exceeds max height */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     position: relative;
 }
