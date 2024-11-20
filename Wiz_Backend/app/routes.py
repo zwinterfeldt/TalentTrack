@@ -1,13 +1,13 @@
-from app import db
+from Wiz_Backend.app import db
 from flask import jsonify, request
 from flask_jwt_extended import create_access_token
 from flask_cors import CORS
-from app.models import users, user_roles, user_emails, email_text, players, comments, roles
+from .models import users, user_roles, user_emails, email_text, players, comments, roles
 from datetime import datetime
 from bcrypt import hashpw, gensalt, checkpw
 import jwt
 import os
-import requests 
+import requests
 
 # def for creating routes in __init__.py file
 def create_routes(app):
