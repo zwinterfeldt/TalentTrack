@@ -9,4 +9,6 @@ COPY . .
 
 EXPOSE 5000
 
+#RUN python -m unittest unit_tests.py
+
 CMD ["python", "run.py"]

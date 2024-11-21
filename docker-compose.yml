@@ -13,7 +13,15 @@ services:
     build:
       context: ./my-app  
     ports:
-      - "3000:3000" 
+      - "3000:3000"
+
+  tests:
+    build: ./Wiz_Backend
+    command: python -m unittest unit_tests.py
+    environment:
+      - DATABASE_URL=sqlite:///:memory
+    depends_on:
+      - backend
 
 volumes:
   db_data:
