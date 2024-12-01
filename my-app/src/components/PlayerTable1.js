@@ -15,34 +15,60 @@ export const PlayerTable1 = () => {
 
     // Fetch players data from the backend
     useEffect(() => {
-        axios.get('http://localhost:5000/api/v1/players')
-            .then(response => setPlayers(response.data))
-            .catch(error => console.error('Failed to fetch players:', error));
+        axios
+            .get('http://localhost:5000/api/v1/players')
+            .then((response) => setPlayers(response.data))
+            .catch((error) => console.error('Failed to fetch players:', error));
     }, []);
 
+    // Save an updated player
     const savePlayer = async (updatedPlayer) => {
         try {
-            const response = await axios.put(`http://localhost:5000/api/v1/playerupdate/${updatedPlayer.player_id}`, updatedPlayer);
+            const response = await axios.put(
+                `http://localhost:5000/api/v1/playerupdate/${updatedPlayer.player_id}`,
+                updatedPlayer
+            );
             if (response.status === 200) {
-                setPlayers(players.map(player =>
-                    player.player_id === updatedPlayer.player_id ? updatedPlayer : player
-                ));
+                setPlayers((prevPlayers) =>
+                    prevPlayers.map((player) =>
+                        player.player_id === updatedPlayer.player_id ? updatedPlayer : player
+                    )
+                );
                 setIsModalOpen(false);
             }
         } catch (error) {
-            console.error("Error updating player:", error);
+            console.error('Error updating player:', error);
         }
     };
 
+    // Add a new player
     const addPlayer = async (newPlayer) => {
         try {
             const response = await axios.post('http://localhost:5000/api/v1/newplayerform', newPlayer);
             if (response.status === 201) {
-                setPlayers([...players, response.data]);
+                setPlayers((prevPlayers) => [...prevPlayers, response.data]);
                 setIsModalOpen(false);
             }
         } catch (error) {
-            console.error("Error adding player:", error);
+            console.error('Error adding player:', error);
+        }
+    };
+
+    // Delete a player
+    const deletePlayer = async (playerId) => {
+        try {
+            const response = await axios.delete(`http://localhost:5000/api/v1/playerdelete/${playerId}`); 
+            
+            // to be edited accordingly but essentially this is sending a delete request to Backend ednpoint
+            
+            if (response.status === 200) {
+                setPlayers((prevPlayers) =>
+                    prevPlayers.filter((player) => player.player_id !== playerId)
+                );
+                setIsModalOpen(false);
+            }
+        } catch (error) {
+            console.error('Error deleting player:', error);
         }
     };
 
@@ -51,6 +77,7 @@ export const PlayerTable1 = () => {
 
     return (
         <>
+            {/* Add Player Button */}
             <div style={{ marginBottom: '20px' }}>
                 <button
                     style={{
@@ -71,6 +98,7 @@ export const PlayerTable1 = () => {
                 </button>
             </div>
 
+            {/* Player Table */}
             <table {...getTableProps()}>
                 <thead>
                     {headerGroups.map((headerGroup) => (
@@ -108,13 +136,15 @@ export const PlayerTable1 = () => {
                 </tbody>
             </table>
 
+            {/* Player Modal */}
             {isModalOpen && (
                 <PlayerModal
                     player={selectedPlayer}
                     isAddingPlayer={isAddingPlayer}
                     onClose={() => setIsModalOpen(false)}
                     onSave={savePlayer}
-                    onAdd={addPlayer} // Pass the addPlayer function here
+                    onAdd={addPlayer}
+                    onDelete={deletePlayer} 
                 />
             )}
         </>
