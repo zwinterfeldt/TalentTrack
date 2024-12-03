@@ -4,7 +4,6 @@ services:
   backend:
     build:
       context: ./Wiz_Backend
-      dockerfile: Dockerfile
     ports:
       - "5000:5000"       
     environment:
@@ -13,7 +12,6 @@ services:
   frontend:
     build:
       context: ./my-app  
-      dockerfile: Dockerfile
     ports:
       - "3000:3000" 
 
