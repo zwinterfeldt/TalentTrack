@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useTable, useSortBy } from 'react-table';
 import { COLUMNS } from './columns';
 import PlayerModal from './PlayerModal';
+import jwt_decode from 'jwt-decode';
 import '../table.css';
 
 export const PlayerTable1 = () => {
@@ -13,13 +14,43 @@ export const PlayerTable1 = () => {
 
     const columns = useMemo(() => COLUMNS, []);
 
-    // Fetch players data from the backend
+    // get players based on user id
     useEffect(() => {
-        axios
-            .get('http://localhost:5000/api/v1/players')
-            .then((response) => setPlayers(response.data))
-            .catch((error) => console.error('Failed to fetch players:', error));
+        const fetchPlayers = async () => {
+            try {
+                const token = localStorage.getItem('jwtToken');
+                if (!token) {
+                    console.error('No JWT token found.');
+                    return;
+                }
+                
+                // decode jwt to get username 
+                const decodedToken = jwt_decode(token);
+                const username = decodedToken.username;
+    
+                // Fetch user id by username
+                const userResponse = await axios.get(`http://localhost:5000/api/v1/user/${username}`);
+                const userId = userResponse.data.user_id;
+    
+                // Fetch players by user id
+                const playerResponse = await axios.get(`http://localhost:5000/api/v1/players/${userId}`);
+                
+                console.log('API Response:', playerResponse.data);
+    
+                // Ensure the response is an array before setting state
+                if (Array.isArray(playerResponse.data)) {
+                    setPlayers(playerResponse.data);
+                } else {
+                    setPlayers([playerResponse.data]);  
+                }
+            } catch (error) {
+                console.error('Error fetching players:', error);
+            }
+        };
+    
+        fetchPlayers();
     }, []);
+    
 
     // Save an updated player
     const savePlayer = async (updatedPlayer) => {
@@ -29,11 +60,9 @@ export const PlayerTable1 = () => {
                 updatedPlayer
             );
             if (response.status === 200) {
-                setPlayers((prevPlayers) =>
-                    prevPlayers.map((player) =>
-                        player.player_id === updatedPlayer.player_id ? updatedPlayer : player
-                    )
-                );
+                setPlayers(players.map(player =>
+                    player.player_id === updatedPlayer.player_id ? updatedPlayer : player
+                ));
                 setIsModalOpen(false);
             }
         } catch (error) {
@@ -58,9 +87,7 @@ export const PlayerTable1 = () => {
     const deletePlayer = async (playerId) => {
         try {
             const response = await axios.delete(`http://localhost:5000/api/v1/playerdelete/${playerId}`); 
-            
-            // to be edited accordingly but essentially this is sending a delete request to Backend ednpoint
-            
+
             if (response.status === 200) {
                 setPlayers((prevPlayers) =>
                     prevPlayers.filter((player) => player.player_id !== playerId)
