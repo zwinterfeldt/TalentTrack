@@ -8,7 +8,12 @@ load_dotenv()
 # Create an instance of SQLAlchemy
 db = SQLAlchemy()
 
-def create_app():   
+def create_app():
+    """
+    Initializes app with database using the URL specified under environment
+    in the doker-compose.yml backend container. Also sets up endpoint routes by calling
+    the create_routes() function in the routes.py file.
+    """
     app = Flask(__name__)
 
     # Configure the app

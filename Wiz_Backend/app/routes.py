@@ -17,6 +17,7 @@ def create_routes(app):
     CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
     @app.route("/api/v1/users", methods = ["GET"])
     def get_users():
+        """Retrieves all users in the database."""
         all_users = users.query.all()  # Query all users
         return jsonify([{
             'user_id': user.user_id,
@@ -41,6 +42,7 @@ def create_routes(app):
     # Get user by id
     @app.route("/api/v1/user/auth", methods = ["GET"])
     def get_user(user_id):
+        """Retrieves user by specific user id."""
         user = users.query.get(user_id)  # Query user by ID
         if user:
             return jsonify({
@@ -54,6 +56,7 @@ def create_routes(app):
     # Get all roles
     @app.route("/api/v1/roles", methods = ["GET"])
     def get_roles():
+        """Retrieves all roles in the database."""
         all_roles = roles.query.all()  # Query all roles
         return jsonify([{
             'role_id': role.role_id,
@@ -63,6 +66,7 @@ def create_routes(app):
     # Get role by id
     @app.route("/api/v1/roles/<int:role_id>", methods = ["GET"])
     def get_role(role_id):
+        """Retrieves a role by specific role id."""
         role = roles.query.get(role_id)  # Query role by ID
         if role:
             return jsonify({
@@ -74,6 +78,7 @@ def create_routes(app):
     # Get all user roles
     @app.route("/api/v1/userroles", methods = ["GET"])
     def get_user_roles():
+        """Retrieves all user roles in the database."""
         all_user_roles = user_roles.query.all()  # Query all user roles
         return jsonify([{
             'user_role_id': user_role.user_role_id,
@@ -84,6 +89,7 @@ def create_routes(app):
 
     # Get user role by id
     def get_user_role(user_role_id):
+        """Retrieves user role by specific user role id."""
         user_role = user_roles.query.get(user_role_id)  # Query user role by ID
         if user_role:
             return jsonify({
@@ -97,6 +103,7 @@ def create_routes(app):
     # Get all user emails
     @app.route("/api/v1/useremails", methods = ["GET"])
     def get_user_emails():
+        """Retrieves all user emails in the database."""
         all_user_emails = user_emails.query.all()  # Query all user emails
         return jsonify([{
             'user_email_id': user_email.user_email_id,
@@ -107,6 +114,7 @@ def create_routes(app):
     # Get user email by id
     @app.route("/api/v1/useremails/<int:user_email_id>", methods = ["GET"])
     def get_user_email(user_email_id):
+        """Retrieves user email by specific id."""
         user_email = user_emails.query.get(user_email_id)  # Query user email by ID
         if user_email:
             return jsonify({
@@ -120,6 +128,7 @@ def create_routes(app):
     # Get email texts
     @app.route("/api/v1/emailtexts", methods = ["GET"])
     def get_email_texts():
+        """Retrieves all email texts in the database."""
         email_texts = email_text.query.all() # Query all email texts
         return jsonify([{
             'email_id': email_text.email_id,
@@ -131,6 +140,7 @@ def create_routes(app):
     # Get email text by id
     @app.route("/api/v1/emailtexts/<int:email_id>", methods = ["GET"])
     def get_email_text(email_id):
+        """Retrieves email text by specific email id."""
         email_texti = email_text.query.get(email_id)  # Query email text by ID
         if email_text:
             return jsonify({
@@ -145,6 +155,7 @@ def create_routes(app):
     # Get all players
     @app.route("/api/v1/players", methods = ["GET"])
     def get_players():
+        """Retrieves all players in the database."""
         all_players = players.query.all()
         return jsonify([{
             'player_id': player.player_id,
@@ -168,6 +179,15 @@ def create_routes(app):
             'last_updated': player.last_updated.isoformat()  # Convert timestamp to ISO format
         } for player in all_players])
 
+
+    # Get player by ID
+    @app.route("/api/v1/players/<int:player_id>", methods=["GET"])
+    def get_player(player_id):
+        """Retrieves a specific player by player id."""
+        player = players.query.get(player_id)
+        if player:
+            return jsonify({
+
     # Get players by user id
     @app.route("/api/v1/players/<int:user_id>", methods=["GET"])
     def get_players_by_user_id(user_id):
@@ -175,6 +195,7 @@ def create_routes(app):
         
         if players_userid:
             return jsonify([{
+             
                 'player_id': player.player_id,
                 'user_id': player.user_id,
                 'source_email_id': player.source_email_id,
@@ -213,6 +234,7 @@ def create_routes(app):
     # Get all comments
     @app.route("/api/v1/comments", methods = ["GET"])
     def get_comments():
+        """Retrieves all comments in the database."""
         all_comments = comments.query.all()  # Query all comments
         return jsonify([{
             'comment_id': comment.comment_id,
@@ -224,6 +246,7 @@ def create_routes(app):
     # Get comment by id
     @app.route("/api/v1/comments/<int:comment_id>", methods = ["GET"])
     def get_comment(comment_id):
+        """Retrieves a comment by specific comment id."""
         comment = comments.query.get(comment_id)  # Query comment by ID
         if comment:
             return jsonify({
@@ -239,6 +262,7 @@ def create_routes(app):
     # Update an existing player
     @app.route("/api/v1/playerupdate/<int:player_id>", methods=["PUT"])
     def update_playerupdate(player_id):
+        """Updates fields of a specified player in the database."""
         data = request.get_json()
         player = players.query.get(player_id)
         if player:
@@ -272,6 +296,7 @@ def create_routes(app):
     # Create user
     @app.route("/api/v1/users", methods = ["POST"])
     def post_user():
+        """Adds a new user to the database upon account creation. Hashes and stores password in database."""
         new_user = request.get_json()
         if not new_user or 'username' not in new_user or 'user_password' not in new_user:
             return jsonify({'error': 'Username and password are required'}), 400
@@ -300,6 +325,7 @@ def create_routes(app):
     # Create roles
     @app.route("/api/v1/roles", methods = ["POST"])
     def post_role():
+        """Adds a new role to the database."""
         new_role = request.get_json()
         if not new_role or 'role_name' not in new_role:
             return jsonify({'error': 'Role name is required'}), 400
@@ -319,6 +345,7 @@ def create_routes(app):
     # Create user roles
     @app.route("/api/v1/userroles", methods = ["POST"])
     def post_user_role():
+        """Adds a new user role to the database."""
         new_user_role = request.get_json()
         if not new_user_role or 'user_id' not in new_user_role or 'role_id' not in new_user_role:
             return jsonify({'error': 'User id and role id are required'}), 400
@@ -340,6 +367,7 @@ def create_routes(app):
     # Create user emails
     @app.route("/api/v1/useremails", methods = ["POST"])
     def post_user_email():
+        """Adds a new user email to the database."""
         new_user_email = request.get_json()
         if not new_user_email or 'user_id' not in new_user_email or 'email_address' not in new_user_email:
             return jsonify({'error': 'User id and email address are required'}), 400
@@ -364,6 +392,7 @@ def create_routes(app):
     # Create email texts
     @app.route("/api/v1/emailtexts", methods = ["POST"])
     def post_email_texts():
+        """Adds a new email text to the database."""
         new_email_text = request.get_json()
         if not new_email_text or 'user_email_id' not in new_email_text or 'email_text' not in new_email_text:
             return jsonify({'error': 'User email id and email text are required'}), 400
@@ -386,6 +415,7 @@ def create_routes(app):
     # Create player
     @app.route("/api/v1/players", methods=["POST"])
     def post_player():
+        """Adds a new player to the database."""
         new_player = request.get_json()
         
         if not new_player:
@@ -437,6 +467,7 @@ def create_routes(app):
     
     @app.route("/api/v1/newplayerform", methods=["POST"])
     def add_playerfromform():
+        """Adds a new player from app manually (not from email parser)."""
         new_player = request.get_json()
 
         if not new_player:
@@ -484,6 +515,7 @@ def create_routes(app):
     # Create comments
     @app.route("/api/v1/comments", methods = ["POST"])
     def post_comments():
+        """Adds a new comment to the database."""
         new_comment = request.get_json()
         if not new_comment or 'player_id' not in new_comment or 'comment_text' not in new_comment:
             return jsonify({'error': 'Player id and comment text are required'}), 400
@@ -521,6 +553,7 @@ def create_routes(app):
 
     @app.route('/api/v1/login', methods=['POST'])
     def login_user():
+        """Provides logic for login system."""
         try:
             data = request.get_json()
             username = data.get('username')
@@ -546,6 +579,7 @@ def create_routes(app):
     # Delete user by id
     @app.route("/api/v1/users/<int:user_id>", methods=['DELETE'])
     def delete_user(user_id):
+        """Deletes a user from the database."""
         user = users.query.get(user_id)
         if user:
             db.session.delete(user)
@@ -556,6 +590,7 @@ def create_routes(app):
     # Delete role by id
     @app.route("/api/v1/roles/<int:role_id>", methods=['DELETE'])
     def delete_role(role_id):
+        """Deletes a role from the database."""
         role = roles.query.get(role_id)
         if role:
             db.session.delete(role)
@@ -566,6 +601,7 @@ def create_routes(app):
     # Delete user role by id
     @app.route("/api/v1/userroles/<int:user_role_id>", methods=['DELETE'])
     def delete_user_role(user_role_id):
+        """Deletes a user role from the database."""
         user_role = user_roles.query.get(user_role_id)
         if user_role:
             db.session.delete(user_role)
@@ -576,6 +612,7 @@ def create_routes(app):
     # Delete user email by id
     @app.route("/api/v1/useremails/<int:user_email_id>", methods=['DELETE'])
     def delete_user_email(user_email_id):
+        """Deletes a user email from the database."""
         user_email = user_emails.query.get(user_email_id)
         if user_email:
             db.session.delete(user_email)
@@ -586,6 +623,7 @@ def create_routes(app):
     # Delete email text by id
     @app.route("/api/v1/emailtexts/<int:email_id>", methods=['DELETE'])
     def delete_email_text(email_id):
+        """Deletes an email text from the database."""
         email = email_text.query.get(email_id)
         if email:
             db.session.delete(email)
@@ -596,6 +634,7 @@ def create_routes(app):
     # Delete player by id
     @app.route("/api/v1/playerdelete/<int:player_id>", methods=['DELETE'])
     def delete_player(player_id):
+        """Deletes a player from the database."""
         player = players.query.get(player_id)
         if player:
             db.session.delete(player)
@@ -606,6 +645,7 @@ def create_routes(app):
     # Delete comment by id
     @app.route("/api/v1/comments/<int:comment_id>", methods=['DELETE'])
     def delete_comment(comment_id):
+        """Deletes a comment from the database."""
         comment = comments.query.get(comment_id)
         if comment:
             db.session.delete(comment)
