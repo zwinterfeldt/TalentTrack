@@ -182,6 +182,7 @@ def create_routes(app):
     # Get players by user id
     @app.route("/api/v1/players/<int:user_id>", methods=["GET"])
     def get_players_by_user_id(user_id):
+        """Retrieves a player by their associated user_id."""
         players_userid = players.query.filter_by(user_id=user_id).all()
         
         if players_userid:
@@ -212,6 +213,7 @@ def create_routes(app):
     #get user id from username
     @app.route("/api/v1/user/<string:username>", methods=["GET"])
     def get_user_id(username):
+        """Retrieves a users user_id from their associated username."""
         try:
             user = users.query.filter_by(username=username).first()
             if user:
