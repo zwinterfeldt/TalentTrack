@@ -16,9 +16,9 @@
     padding: 20px;
     border-radius: 8px;
     width: 90vw;
-    max-width: 500px; /* Max width */
-    max-height: 80vh; /* Max height */
-    overflow-y: auto; /* Scroll if content exceeds max height */
+    max-width: 500px; 
+    max-height: 80vh; 
+    overflow-y: auto; 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     position: relative;
 }
@@ -88,4 +88,31 @@ button.deleteButton {
     background-color: red;
     color: white;
 }
+.profilePictureContainer {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
+.profilePicture {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%; 
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+
+.profilePicturePlaceholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #aaa;
+    font-size: 14px;
+}
+
+.imageUploadInput {
+    margin-top: 10px;
+}

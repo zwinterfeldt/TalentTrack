@@ -179,6 +179,7 @@ def create_routes(app):
             'last_updated': player.last_updated.isoformat()  # Convert timestamp to ISO format
         } for player in all_players])
 
+
     # Get player by ID
     @app.route("/api/v1/players/<int:player_id>", methods=["GET"])
     def get_player(player_id):
@@ -186,6 +187,15 @@ def create_routes(app):
         player = players.query.get(player_id)
         if player:
             return jsonify({
+
+    # Get players by user id
+    @app.route("/api/v1/players/<int:user_id>", methods=["GET"])
+    def get_players_by_user_id(user_id):
+        players_userid = players.query.filter_by(user_id=user_id).all()
+        
+        if players_userid:
+            return jsonify([{
+             
                 'player_id': player.player_id,
                 'user_id': player.user_id,
                 'source_email_id': player.source_email_id,
@@ -205,8 +215,21 @@ def create_routes(app):
                 'parents_contacts': player.parents_contacts,
                 'stars': player.stars,
                 'last_updated': player.last_updated.isoformat()
-            })
-        return jsonify({'message': 'Player not found'}), 404
+            } for player in players_userid])  # Return the list of players
+        return jsonify({'message': 'No players found for this user'}), 404
+    
+    #get user id from username
+    @app.route("/api/v1/user/<string:username>", methods=["GET"])
+    def get_user_id(username):
+        try:
+            user = users.query.filter_by(username=username).first()
+            if user:
+                return jsonify({'user_id': user.user_id})
+            return jsonify({'message': 'User not found'}), 404
+        except Exception as e:
+            print(f"Error fetching user_id: {e}")
+            return jsonify({'error': 'An error occurred while fetching user ID'}), 500
+
     
     # Get all comments
     @app.route("/api/v1/comments", methods = ["GET"])
@@ -609,7 +632,7 @@ def create_routes(app):
         return jsonify({'message': 'Email text not found'}), 404
 
     # Delete player by id
-    @app.route("/api/v1/players/<int:player_id>", methods=['DELETE'])
+    @app.route("/api/v1/playerdelete/<int:player_id>", methods=['DELETE'])
     def delete_player(player_id):
         """Deletes a player from the database."""
         player = players.query.get(player_id)

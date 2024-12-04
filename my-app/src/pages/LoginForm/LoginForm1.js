@@ -43,6 +43,7 @@ const LoginForm1 = () => {
                 setAuth({ user, pwd, roles, accessToken });
                 setUser('');
                 setPwd('');
+                localStorage.setItem("jwtToken", accessToken);
                 setSuccess(true);
                 navigate('/dashboard');
         } catch (err) {
