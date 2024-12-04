@@ -179,15 +179,6 @@ def create_routes(app):
             'last_updated': player.last_updated.isoformat()  # Convert timestamp to ISO format
         } for player in all_players])
 
-
-    # Get player by ID
-    @app.route("/api/v1/players/<int:player_id>", methods=["GET"])
-    def get_player(player_id):
-        """Retrieves a specific player by player id."""
-        player = players.query.get(player_id)
-        if player:
-            return jsonify({
-
     # Get players by user id
     @app.route("/api/v1/players/<int:user_id>", methods=["GET"])
     def get_players_by_user_id(user_id):
