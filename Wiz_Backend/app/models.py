@@ -54,6 +54,7 @@ class players(db.Model):
     parents_names = db.Column(db.String(255))
     parents_contacts = db.Column(db.String(255))
     stars = db.Column(db.Integer)
+    jersey_number = db.Column(db.Integer)
     last_updated = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 # Comments model
