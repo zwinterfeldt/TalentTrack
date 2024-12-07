@@ -5,16 +5,19 @@ from flask_cors import CORS
 from app.models import users, user_roles, user_emails, email_text, players, comments, roles
 from datetime import datetime
 from bcrypt import hashpw, gensalt, checkpw
+from dotenv import load_dotenv
 import jwt
 import os
 import requests 
+
+frontend_url = os.environ.get('FRONTEND_URL')
 
 # def for creating routes in __init__.py file
 def create_routes(app):
     # GET endpoints
     # Get all users
     # Enable CORS for all routes and allow requests from http://localhost:3000
-    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+    CORS(app, resources={r"/*": {"origins": frontend_url}})
     @app.route("/api/v1/users", methods = ["GET"])
     def get_users():
         """Retrieves all users in the database."""
@@ -182,7 +185,6 @@ def create_routes(app):
     # Get players by user id
     @app.route("/api/v1/players/<int:user_id>", methods=["GET"])
     def get_players_by_user_id(user_id):
-        """Retrieves a player by their associated user_id."""
         players_userid = players.query.filter_by(user_id=user_id).all()
         
         if players_userid:
@@ -213,7 +215,6 @@ def create_routes(app):
     #get user id from username
     @app.route("/api/v1/user/<string:username>", methods=["GET"])
     def get_user_id(username):
-        """Retrieves a users user_id from their associated username."""
         try:
             user = users.query.filter_by(username=username).first()
             if user:
@@ -309,10 +310,13 @@ def create_routes(app):
         db.session.add(user)
         db.session.commit()
 
+        token = jwt.encode({"username": user.username}, SECRET_KEY, algorithm="HS256")
+
         return jsonify({
             'user_id': user.user_id,
             'username': user.username,
-            'created_at': user.created_at
+            'created_at': user.created_at,
+            'token': token 
         }), 201
 
     # Create roles

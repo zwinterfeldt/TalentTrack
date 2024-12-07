@@ -5,7 +5,8 @@ import styles from './SignupForm1.module.css';
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[1@#$%]).{8,24}$/;
-const SIGNUP_URL = 'http://127.0.0.1:5000/api/v1/users';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const SIGNUP_URL = `${BACKEND_URL}/api/v1/users`;
 
 const SignupForm1 = () => {
     const userRef = useRef();
@@ -58,6 +59,11 @@ const SignupForm1 = () => {
                 JSON.stringify({ username: user, user_password: pwd }),
                 { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
             );
+
+            const { token } = response.data;  
+
+            localStorage.setItem("jwtToken", token);
+
             setSuccess(true);
             navigate('/dashboard');
         } catch (err) {

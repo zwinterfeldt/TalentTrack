@@ -4,7 +4,9 @@ import axios from '../../api/axios';
 import styles from './LoginForm.module.css';
 import { useNavigate } from 'react-router-dom';
 
-const LOGIN_URL = '/api/v1/login';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const LOGIN_URL = `${BACKEND_URL}/api/v1/login`;
+console.log(LOGIN_URL);
 
 const LoginForm1 = () => {
     const { setAuth } = useContext(AuthContext);
@@ -12,7 +14,7 @@ const LoginForm1 = () => {
     const errRef = useRef();
 
     const [user, setUser] = useState('');
-    const [pwd, setPwd] = useState('');
+    const [pwd, setPwd] = useState(''); 
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
 
