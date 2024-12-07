@@ -5,6 +5,8 @@ WORKDIR /my-app
 COPY package.json package-lock.json ./
 RUN npm install
 
+ENV REACT_APP_BACKEND_URL=https://talenttrack-backend.onrender.com
+
 COPY . .
 
 RUN npm run build
