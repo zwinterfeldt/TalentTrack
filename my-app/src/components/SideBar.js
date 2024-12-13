@@ -2,7 +2,6 @@ import React from 'react';
 import { NavLink, useLocation } from "react-router-dom";
 import { CSVLink } from "react-csv";
 import styles from './SideBar.module.css';
-import players from './players.json'; 
 
 const navItems = [
   {
@@ -22,16 +21,29 @@ const navItems = [
   }
 ];
 
-const SideBar = () => {
+const SideBar = ({ players }) => {
   const location = useLocation();
 
   // CSV Headers
   const headers = [
-    { label: "Name", key: "name" },
-    { label: "High School", key: "highSchool" },
+    {label: "Player ID", key: "player_id"},
+    { label: "First Name", key: "first_name" },
+    { label: "Last Name", key: "last_name" },
+    { label: "Address", key: "address" },
+    { label: "Grad year", key: "grad_year" },
     { label: "GPA", key: "gpa" },
+    { label: "Position", key: "player_position" },
+    { label: "High School", key: "high_school" },
+    { label: "High School Coach Name", key: "high_school_coach_name" },
+    { label: "High School Coach Email", key: "high_school_coach_email" },
     { label: "Club Team", key: "clubTeam" },
-    { label: "Position", key: "position" }
+    { label: "Club Team Coach Name", key: "club_team_coach_name" },
+    { label: "Club Team Coach Email", key: "club_team_coach_email" },
+    { label: "Parents Names", key: "parents_names" },
+    { label: "Parents Contacts", key: "parents_contacts" },
+    { label: "Stars", key: "stars" },
+    { label: "Jersey Number", key: "jersey_number" },
+    { label: "Last updated", key: "last_updated" }
   ];
 
   return (

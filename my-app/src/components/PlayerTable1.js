@@ -6,7 +6,7 @@ import PlayerModal from './PlayerModal';
 import jwt_decode from 'jwt-decode';
 import '../table.css';
 
-export const PlayerTable1 = () => {
+export const PlayerTable1 = ({onPlayersUpdate}) => {
     const [players, setPlayers] = useState([]);
     const [selectedPlayer, setSelectedPlayer] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,8 +40,10 @@ export const PlayerTable1 = () => {
                 // Ensure the response is an array before setting state
                 if (Array.isArray(playerResponse.data)) {
                     setPlayers(playerResponse.data);
+                    onPlayersUpdate(playerResponse.data);
                 } else {
-                    setPlayers([playerResponse.data]);  
+                    setPlayers([playerResponse.data]);
+                    onPlayersUpdate([playerResponse.data]);
                 }
             } catch (error) {
                 console.error('Error fetching players:', error);
@@ -49,7 +51,7 @@ export const PlayerTable1 = () => {
         };
     
         fetchPlayers();
-    }, []);
+    }, ['http://localhost:5000', onPlayersUpdate]);
     
 
     // Save an updated player
