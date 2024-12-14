@@ -1,5 +1,5 @@
 //dashboard.js
-import React from 'react';
+import React, { useState } from 'react';
 import { CSVLink } from 'react-csv';
 import SideBar from '../../components/SideBar';  
 import PlayerTable from '../../components/PlayerTable';
@@ -11,24 +11,17 @@ import PlayerModal from '../../components/PlayerModal';
 
 const Dashboard = () => {
 
-    const headers = [
-        { label: "Name", key: "name" },
-        { label: "High School", key: "highSchool" },
-        { label: "GPA", key: "gpa" },
-        { label: "Club Team", key: "clubTeam" },
-        { label: "Position", key: "position" }
-    ];
+    const [players, setPlayers] = useState([]);
 
     return (
         <div className={styles.dashboardContainer}> 
             <div className={styles.sideBar}>
-                <SideBar /> 
+                <SideBar players={players} /> 
             </div>
             <div className={styles.mainContent}>
                 <h1>Dashboard</h1>
-                <PlayerTable1 /> 
+                <PlayerTable1 onPlayersUpdate={setPlayers} /> 
             </div>
-
         </div>
     );
 };
