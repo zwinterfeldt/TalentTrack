@@ -179,11 +179,13 @@ const SignupForm1 = () => {
                                     </p>
                                 )}
                             </div>
-                            <button disabled={!validName || !validPwd || !validMatch || !validEmail} className={styles.signInButton}>
-                                Sign Up
-                            </button>
+                                <button disabled={!validName || !validPwd || !validMatch} className={styles.signInButton}>
+                            <span className={styles.signInButtonText}>Sign Up</span>
+                        </button>
                         </form>
-                        <p>Already have an account? <a href="/login">Sign in</a></p>
+                        <p>Already have an account?<br />
+                            <span className={styles.signInLink}><a href="/login">Sign in</a></span>
+                        </p>
                     </div>
                 </section>
             )}
