@@ -13,6 +13,7 @@ export const PlayerTable1 = ({onPlayersUpdate}) => {
     const [isAddingPlayer, setIsAddingPlayer] = useState(false);
 
     const columns = useMemo(() => COLUMNS, []);
+    const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
     // get players based on user id
     useEffect(() => {
@@ -29,11 +30,11 @@ export const PlayerTable1 = ({onPlayersUpdate}) => {
                 const username = decodedToken.username;
     
                 // Fetch user id by username
-                const userResponse = await axios.get(`http://localhost:5000/api/v1/user/${username}`);
+                const userResponse = await axios.get(`${BACKEND_URL}/api/v1/user/${username}`);
                 const userId = userResponse.data.user_id;
     
                 // Fetch players by user id
-                const playerResponse = await axios.get(`http://localhost:5000/api/v1/players/${userId}`);
+                const playerResponse = await axios.get(`${BACKEND_URL}/api/v1/players/${userId}`);
                 
                 console.log('API Response:', playerResponse.data);
     
@@ -51,14 +52,14 @@ export const PlayerTable1 = ({onPlayersUpdate}) => {
         };
     
         fetchPlayers();
-    }, ['http://localhost:5000', onPlayersUpdate]);
+    }, [`${BACKEND_URL}`, onPlayersUpdate]);
     
 
     // Save an updated player
     const savePlayer = async (updatedPlayer) => {
         try {
             const response = await axios.put(
-                `http://localhost:5000/api/v1/playerupdate/${updatedPlayer.player_id}`,
+                `${BACKEND_URL}/api/v1/playerupdate/${updatedPlayer.player_id}`,
                 updatedPlayer
             );
             if (response.status === 200) {
@@ -84,7 +85,7 @@ export const PlayerTable1 = ({onPlayersUpdate}) => {
             const decodedToken = jwt_decode(token);
             const username = decodedToken.username;
     
-            const userResponse = await axios.get(`http://localhost:5000/api/v1/user/${username}`);
+            const userResponse = await axios.get(`${BACKEND_URL}/api/v1/user/${username}`);
             const userId = userResponse.data.user_id;
     
             // Ensure all fields are sent properly
@@ -108,7 +109,7 @@ export const PlayerTable1 = ({onPlayersUpdate}) => {
                 stars: newPlayerData.stars || null,
             };
     
-            const response = await axios.post('http://localhost:5000/api/v1/newplayerform', newPlayer);
+            const response = await axios.post(`${BACKEND_URL}/api/v1/newplayerform`, newPlayer);
     
             if (response.status === 201) {
                 setPlayers((prevPlayers) => [...prevPlayers, response.data]);
@@ -122,7 +123,7 @@ export const PlayerTable1 = ({onPlayersUpdate}) => {
     // Delete a player
     const deletePlayer = async (playerId) => {
         try {
-            const response = await axios.delete(`http://localhost:5000/api/v1/playerdelete/${playerId}`); 
+            const response = await axios.delete(`${BACKEND_URL}/api/v1/playerdelete/${playerId}`); 
 
             if (response.status === 200) {
                 setPlayers((prevPlayers) =>
