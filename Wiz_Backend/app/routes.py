@@ -287,27 +287,37 @@ def create_routes(app):
     SECRET_KEY = "your-secret-key"
 
 
-    # Create user
-    @app.route("/api/v1/users", methods = ["POST"])
+     # Create user
+    @app.route("/api/v1/users", methods=["POST"])
     def post_user():
         """Adds a new user to the database upon account creation. Hashes and stores password in database."""
         new_user = request.get_json()
-        if not new_user or 'username' not in new_user or 'user_password' not in new_user:
-            return jsonify({'error': 'Username and password are required'}), 400
+        if not new_user or 'username' not in new_user or 'user_password' not in new_user or 'email' not in new_user:
+            return jsonify({'error': 'Username, password, and email are required'}), 400
 
+        # Check for existing user
         existing_user = users.query.filter_by(username=new_user['username']).first()
         if existing_user:
             return jsonify({'error': 'Username already exists'}), 409
-        
+
         # Hash password
         hashed_password = hashpw(new_user['user_password'].encode('utf-8'), gensalt()).decode('utf-8')
 
+        # Create new user
         user = users()
         user.username = new_user['username']
         user.user_password = hashed_password
         user.created_at = datetime.utcnow()
 
         db.session.add(user)
+        db.session.commit()  # Get user ID before commit
+
+        # Add email to user_emails table
+        email = user_emails()
+        email.user_id = user.user_id
+        email.email_address = new_user['email']
+
+        db.session.add(email)
         db.session.commit()
 
         token = jwt.encode({"username": user.username}, SECRET_KEY, algorithm="HS256")
@@ -315,8 +325,9 @@ def create_routes(app):
         return jsonify({
             'user_id': user.user_id,
             'username': user.username,
+            'email': email.email_address,
             'created_at': user.created_at,
-            'token': token 
+            'accessToken': token
         }), 201
 
     # Create roles

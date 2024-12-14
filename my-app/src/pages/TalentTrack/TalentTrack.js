@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import styles from './TalentTrack.module.css';
 
 function TalentTrack() {
+  localStorage.clear();
+  
   const navigate = useNavigate();  // Initialize navigate
 
   // Navigation functions
