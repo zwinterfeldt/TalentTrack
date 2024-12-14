@@ -108,7 +108,7 @@ const LoginForm1 = () => {
                     </form>
                     <p>Need an account?<br />
                         <span className={styles.signUpButton}>
-                            <a href="#">Sign up</a>
+                            <a href="/signup">Sign up</a>
                         </span>
                     </p>
                 </section>
